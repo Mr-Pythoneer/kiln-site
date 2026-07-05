@@ -1,0 +1,631 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Kiln — Documentation</title>
+<meta name="description" content="Kiln trains small, private, specialist language models to order. You own the model and run it on your own hardware. Pre-beta." />
+<style>
+  :root{
+    --paper:#f4f2ec;
+    --paper2:#efece4;
+    --ink:#16181c;
+    --muted:#565a62;
+    --faint:#a5a79f;
+    --rule:#dcdad1;
+    --rule2:#e7e4db;
+    --accent:#2f5d62;          /* muted deep teal — the one restrained mark of colour */
+    --accent-soft:#e2eae9;
+    --mono:ui-monospace,"SFMono-Regular","SF Mono","Menlo","Consolas","Liberation Mono",monospace;
+    --sans:"Helvetica Neue","Segoe UI",Roboto,ui-sans-serif,system-ui,-apple-system,Arial,sans-serif;
+    --maxw:1180px;
+    --idx:230px;
+  }
+  *{box-sizing:border-box}
+  html{scroll-behavior:smooth}
+  @media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}}
+  body{
+    margin:0;background:var(--paper);color:var(--ink);
+    font-family:var(--mono);font-size:15px;line-height:1.6;
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    /* faint engineering-paper grid: an SVG hairline tile */
+    background-image:url("data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A%2F%2Fwww.w3.org%2F2000%2Fsvg%22%20width%3D%2226%22%20height%3D%2226%22%3E%3Cpath%20d%3D%22M26%200H0V26%22%20fill%3D%22none%22%20stroke%3D%22%23e7e4db%22%20stroke-width%3D%221%22%2F%3E%3C%2Fsvg%3E");
+    background-position:-1px -1px;
+  }
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--faint);transition:border-color .16s,color .16s}
+  a:hover{border-color:var(--accent);color:var(--accent)}
+  ::selection{background:var(--accent);color:var(--paper)}
+
+  /* ------- frame / letterhead ------- */
+  .frame{max-width:var(--maxw);margin:0 auto;background:var(--paper);
+    border-left:1px solid var(--rule);border-right:1px solid var(--rule)}
+  .doc-head{border-bottom:1px solid var(--ink);padding:16px clamp(18px,4vw,40px)}
+  .doc-head .row{display:flex;justify-content:space-between;align-items:baseline;gap:20px;flex-wrap:wrap}
+  .brand{font-family:var(--mono);font-weight:700;font-size:15px;letter-spacing:.42em;text-transform:uppercase}
+  .brand b{color:var(--accent);font-weight:700}
+  .doc-meta{font-size:11.5px;letter-spacing:.13em;text-transform:uppercase;color:var(--muted);
+    display:flex;gap:22px;flex-wrap:wrap}
+  .doc-meta span b{color:var(--ink);font-weight:600}
+  .rev-strip{display:flex;gap:0;border-top:1px solid var(--rule);margin-top:14px;
+    font-size:10.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);overflow-x:auto}
+  .rev-strip div{padding:6px 14px 4px 0;white-space:nowrap}
+
+  /* ------- layout: fixed index + document ------- */
+  .body-wrap{display:grid;grid-template-columns:var(--idx) 1fr}
+  nav.index{border-right:1px solid var(--rule)}
+  nav.index .sticky{position:sticky;top:0;padding:26px clamp(14px,2vw,22px);
+    max-height:100vh;overflow-y:auto}
+  .index .lbl{font-size:10.5px;letter-spacing:.18em;text-transform:uppercase;color:var(--faint);
+    margin-bottom:16px;padding-bottom:8px;border-bottom:1px solid var(--rule)}
+  .index ol{list-style:none;margin:0;padding:0}
+  .index li{margin:0 0 2px}
+  .index a{display:flex;gap:10px;padding:5px 8px;border:0;border-radius:2px;
+    font-size:12.5px;color:var(--muted);align-items:baseline;transition:background .14s,color .14s}
+  .index a .n{color:var(--faint);font-variant-numeric:tabular-nums}
+  .index a:hover{background:var(--paper2);color:var(--ink)}
+  .index a.on{background:var(--accent-soft);color:var(--accent)}
+  .index a.on .n{color:var(--accent)}
+  .index .foot{margin-top:26px;padding-top:14px;border-top:1px solid var(--rule);
+    font-size:11px;color:var(--faint);line-height:1.7}
+
+  main{min-width:0}
+  section{padding:clamp(30px,5vw,58px) clamp(18px,4vw,52px);border-bottom:1px solid var(--rule)}
+  section:last-of-type{border-bottom:0}
+  .clause{display:flex;align-items:baseline;gap:14px;margin-bottom:22px}
+  .clause .no{font-size:12px;letter-spacing:.1em;color:var(--accent);font-variant-numeric:tabular-nums;
+    padding:2px 8px;border:1px solid var(--accent);border-radius:2px;white-space:nowrap}
+  .clause h2{font-size:clamp(15px,2.2vw,18px);letter-spacing:.05em;text-transform:uppercase;font-weight:700;margin:0}
+  .clause .dots{flex:1;border-bottom:1px dotted var(--rule);transform:translateY(-4px)}
+  .clause .pg{font-size:11.5px;color:var(--faint);letter-spacing:.1em}
+
+  p{margin:0 0 15px;max-width:66ch}
+  .lede-block p{font-family:var(--sans);font-size:16px;line-height:1.62;color:#2b2e33;max-width:64ch}
+  .prose p{font-family:var(--sans);font-size:15px;line-height:1.62;color:#33363c;max-width:66ch}
+  .muted{color:var(--muted)}
+  em{font-style:normal;color:var(--accent)}
+  strong{font-weight:600}
+
+  /* ------- hero / abstract ------- */
+  .abstract{padding-top:clamp(36px,6vw,72px)}
+  .kicker{font-size:11.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--muted);
+    display:flex;align-items:center;gap:12px;margin-bottom:26px}
+  .kicker .tick{width:9px;height:9px;background:var(--accent);border-radius:50%;flex:none;
+    animation:pulse 2.6s ease-in-out infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.28}}
+  @media (prefers-reduced-motion:reduce){.kicker .tick{animation:none}}
+  h1{font-family:var(--mono);font-weight:700;font-size:clamp(30px,5.6vw,58px);line-height:1.07;
+    letter-spacing:-.02em;margin:0 0 6px;max-width:20ch;text-wrap:balance}
+  h1 em{color:var(--accent)}
+  .h1-sub{font-family:var(--mono);font-size:clamp(15px,2.4vw,20px);color:var(--muted);
+    letter-spacing:-.01em;margin:0 0 30px;max-width:52ch;line-height:1.4}
+  .abs-grid{display:grid;grid-template-columns:1.35fr 1fr;gap:clamp(24px,4vw,52px);align-items:start}
+  @media (max-width:820px){.abs-grid{grid-template-columns:1fr}}
+
+  /* spec key/value block */
+  .kv{border-top:1px solid var(--ink);border-bottom:1px solid var(--rule)}
+  .kv .r{display:grid;grid-template-columns:130px 1fr;gap:16px;padding:11px 0;border-bottom:1px solid var(--rule)}
+  .kv .r:last-child{border-bottom:0}
+  .kv .k{font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);padding-top:2px}
+  .kv .v{font-size:13.5px;color:var(--ink);line-height:1.5}
+  .kv .v b{color:var(--accent)}
+
+  /* terminal */
+  .term{background:#16181c;color:#e9e7de;border-radius:3px;padding:16px 18px;font-size:13px;
+    line-height:1.7;overflow-x:auto;border:1px solid #16181c}
+  .term .p{color:#7f8a86}
+  .term .c{color:#e9e7de}
+  .term .g{color:#8fb7a6}
+  .term .cursor{display:inline-block;width:8px;height:15px;background:#8fb7a6;
+    vertical-align:-2px;margin-left:2px;animation:blink 1.05s step-end infinite}
+  @keyframes blink{50%{opacity:0}}
+  @media (prefers-reduced-motion:reduce){.term .cursor{animation:none}}
+  .term-cap{font-size:11px;letter-spacing:.13em;text-transform:uppercase;color:var(--faint);margin-top:8px}
+
+  /* ------- thesis two-column comparison ------- */
+  .compare{display:grid;grid-template-columns:1fr 1fr;gap:0;border:1px solid var(--rule);margin:6px 0 4px}
+  @media (max-width:720px){.compare{grid-template-columns:1fr}}
+  .compare .col{padding:20px 22px}
+  .compare .col:first-child{border-right:1px solid var(--rule);background:var(--paper2)}
+  @media (max-width:720px){.compare .col:first-child{border-right:0;border-bottom:1px solid var(--rule)}}
+  .compare h3{font-size:12px;letter-spacing:.13em;text-transform:uppercase;margin:0 0 4px;color:var(--muted)}
+  .compare .col.own h3{color:var(--accent)}
+  .compare .big{font-family:var(--mono);font-size:19px;letter-spacing:-.01em;margin:0 0 14px;line-height:1.25}
+  .compare ul{list-style:none;margin:0;padding:0;font-size:13px;color:var(--muted);line-height:1.5}
+  .compare li{padding:7px 0 7px 20px;position:relative;border-top:1px solid var(--rule2)}
+  .compare li:before{content:"—";position:absolute;left:0;color:var(--faint)}
+  .compare .own li:before{content:"+";color:var(--accent)}
+
+  /* ------- ASCII diagram ------- */
+  .diagram{overflow-x:auto;border:1px solid var(--rule);background:var(--paper2);border-radius:3px}
+  .diagram pre{margin:0;padding:22px clamp(16px,3vw,28px);font-family:var(--mono);
+    font-size:12.5px;line-height:1.5;color:var(--ink);white-space:pre;min-width:max-content}
+  .diagram pre .a{color:var(--accent);font-weight:600}
+  .diagram pre .d{color:var(--faint)}
+  .dia-cap{display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint);margin-top:10px}
+
+  /* ------- process / steps ------- */
+  .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:0;border:1px solid var(--rule)}
+  @media (max-width:780px){.steps{grid-template-columns:1fr}}
+  .steps .s{padding:20px 22px;border-right:1px solid var(--rule)}
+  .steps .s:last-child{border-right:0}
+  @media (max-width:780px){.steps .s{border-right:0;border-bottom:1px solid var(--rule)}.steps .s:last-child{border-bottom:0}}
+  .steps .sn{font-size:11px;letter-spacing:.16em;color:var(--accent);margin-bottom:12px;font-variant-numeric:tabular-nums}
+  .steps h3{font-size:15px;margin:0 0 8px;letter-spacing:-.01em}
+  .steps p{font-size:13px;color:var(--muted);line-height:1.55;margin:0;max-width:none}
+  .flow-note{font-size:12px;color:var(--faint);margin-top:12px;letter-spacing:.02em}
+
+  /* ------- applicability table ------- */
+  .tbl-wrap{overflow-x:auto;border:1px solid var(--rule);border-radius:3px}
+  table{border-collapse:collapse;width:100%;min-width:600px;font-size:13px}
+  thead th{text-align:left;font-size:10.5px;letter-spacing:.14em;text-transform:uppercase;color:var(--faint);
+    font-weight:600;padding:11px 16px;border-bottom:1px solid var(--ink);background:var(--paper2)}
+  tbody td{padding:12px 16px;border-bottom:1px solid var(--rule2);vertical-align:top;color:var(--muted)}
+  tbody tr:last-child td{border-bottom:0}
+  tbody td:first-child{color:var(--ink);font-weight:600;white-space:nowrap}
+  tbody td .why{color:var(--muted)}
+  tbody tr:hover td{background:var(--paper2)}
+
+  /* ------- FAQ definition list ------- */
+  .faq{border-top:1px solid var(--ink)}
+  .faq .item{border-bottom:1px solid var(--rule)}
+  .faq .q{display:grid;grid-template-columns:44px 1fr;gap:12px;padding:16px 0;cursor:pointer;align-items:baseline;
+    font-size:15px;letter-spacing:-.01em;color:var(--ink);background:none;border:0;width:100%;text-align:left;font-family:var(--mono)}
+  .faq .q .fn{font-size:11px;color:var(--accent);font-variant-numeric:tabular-nums;letter-spacing:.05em}
+  .faq .q .qt{display:flex;justify-content:space-between;gap:16px;align-items:baseline}
+  .faq .q .sign{color:var(--faint);font-size:16px;flex:none;transition:transform .18s}
+  .faq .item.open .sign{transform:rotate(45deg);color:var(--accent)}
+  .faq .a{display:grid;grid-template-rows:0fr;transition:grid-template-rows .22s ease}
+  @media (prefers-reduced-motion:reduce){.faq .a{transition:none}}
+  .faq .item.open .a{grid-template-rows:1fr}
+  .faq .a > div{overflow:hidden}
+  .faq .a p{font-family:var(--sans);font-size:14px;color:#3a3d43;line-height:1.6;
+    margin:0 0 16px;padding-left:56px;max-width:70ch}
+
+  /* ------- register / CTA ------- */
+  .register{background:var(--ink);color:var(--paper);border-bottom:0}
+  .register .clause h2{color:var(--paper)}
+  .register .clause .no{color:#9fd0c9;border-color:#3a4b4b}
+  .register .clause .dots{border-bottom-color:#33363c}
+  .register .clause .pg{color:#6a6d72}
+  .reg-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:clamp(24px,4vw,48px);align-items:start}
+  @media (max-width:820px){.reg-grid{grid-template-columns:1fr}}
+  .reg-grid h3{font-family:var(--mono);font-size:clamp(20px,3vw,30px);line-height:1.18;margin:0 0 16px;
+    letter-spacing:-.01em;max-width:20ch;text-wrap:balance}
+  .reg-grid h3 em{color:#9fd0c9}
+  .reg-grid p{color:#b6b8b4;font-size:14px;max-width:52ch}
+  .reg-grid p a{color:#9fd0c9;border-bottom-color:#3a4b4b}
+  .reg-grid p a:hover{border-bottom-color:#9fd0c9;color:#c7e5e0}
+  .cta-card{border:1px solid #33363c;padding:22px}
+  .cta-card .cl{font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:#6a6d72;margin-bottom:14px}
+  .mailbtn{display:block;text-align:center;background:var(--paper);color:var(--ink);
+    padding:14px 18px;border:0;font-family:var(--mono);font-weight:700;font-size:14px;letter-spacing:.05em;
+    border-radius:2px;text-decoration:none;transition:background .16s,color .16s}
+  .mailbtn:hover{background:var(--accent);color:var(--paper)}
+  .cta-fine{font-size:12px;color:#83868b;margin:14px 0 0;line-height:1.6}
+  .cohort{display:flex;gap:0;margin:18px 0 4px;border:1px solid #33363c;font-size:11px}
+  .cohort div{flex:1;padding:9px 12px;border-right:1px solid #33363c;color:#83868b;
+    letter-spacing:.08em;text-transform:uppercase}
+  .cohort div:last-child{border-right:0}
+  .cohort div b{display:block;color:var(--paper);font-size:13px;letter-spacing:0;text-transform:none;margin-top:3px}
+  .cohort div b .lit{color:#9fd0c9}
+
+  /* ------- colophon footer ------- */
+  .colophon{max-width:var(--maxw);margin:0 auto;border-left:1px solid var(--rule);border-right:1px solid var(--rule);
+    border-top:0;padding:16px clamp(18px,4vw,40px);display:flex;justify-content:space-between;gap:16px;flex-wrap:wrap;
+    background:var(--paper);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--faint)}
+
+  /* mobile: index becomes a horizontal scroll rail on top */
+  @media (max-width:720px){
+    :root{--idx:0px}
+    .body-wrap{grid-template-columns:1fr}
+    .body-wrap{min-width:0}
+    nav.index{border-right:0;border-bottom:1px solid var(--rule);position:sticky;top:0;z-index:20;background:var(--paper);min-width:0}
+    nav.index .sticky{position:static;padding:0;max-height:none;min-width:0}
+    .index ol{max-width:100%}
+    .index .lbl,.index .foot{display:none}
+    .index ol{display:flex;overflow-x:auto;gap:2px;padding:8px 10px}
+    .index li{flex:none}
+    .index a{white-space:nowrap;font-size:12px}
+    .index a .n{display:inline}
+  }
+
+  /* interactive topology visualisation (Fig. 1) */
+  .vizbox{position:relative;border:1px solid var(--rule);background:var(--paper2);margin-top:2px}
+  .vizbox .vhead,.vizbox .vlegend{display:flex;justify-content:space-between;gap:12px;
+    font-family:var(--mono);font-size:11px;letter-spacing:.13em;text-transform:uppercase;
+    padding:9px 14px;color:var(--muted)}
+  .vizbox .vhead{border-bottom:1px solid var(--rule)}
+  .vizbox .vlegend{border-top:1px solid var(--rule);color:var(--faint)}
+  .vizbox .vlegend .r{color:var(--accent)}
+  .vizbox canvas{display:block;width:100%;height:360px;touch-action:pan-y}
+  @media(max-width:640px){.vizbox canvas{height:300px}.vizbox .vhead,.vizbox .vlegend{font-size:10px;letter-spacing:.08em}}
+</style>
+</head>
+<body>
+<div class="frame">
+
+  <header class="doc-head">
+    <div class="row">
+      <a class="brand" href="index.html" style="text-decoration:none;border:0;color:inherit">KIL<b>N</b></a>
+      <div class="doc-meta">
+        <span><a href="index.html" style="border:0;color:var(--accent);text-decoration:none">← Overview</a></span>
+        <span>DOC <b>KLN-001</b></span>
+        <span>REV <b>0.9 · PRE-BETA</b></span>
+        <span>ISSUED <b>2026</b></span>
+        <span>CLASS <b>PUBLIC</b></span>
+      </div>
+    </div>
+    <div class="rev-strip">
+      <div>SUBJECT — SPECIALIST LANGUAGE MODELS, TRAINED TO ORDER</div>
+      <div>OWNERSHIP — CUSTOMER-HELD</div>
+      <div>RUNTIME — YOUR HARDWARE</div>
+      <div>NETWORK — NONE REQUIRED</div>
+    </div>
+  </header>
+
+  <div class="body-wrap">
+
+    <!-- FIXED INDEX -->
+    <nav class="index">
+      <div class="sticky">
+        <div class="lbl">Contents</div>
+        <ol>
+          <li><a href="#s00" data-t="s00"><span class="n">00</span><span>Abstract</span></a></li>
+          <li><a href="#s01" data-t="s01"><span class="n">01</span><span>Thesis</span></a></li>
+          <li><a href="#s02" data-t="s02"><span class="n">02</span><span>Topology</span></a></li>
+          <li><a href="#s03" data-t="s03"><span class="n">03</span><span>Procedure</span></a></li>
+          <li><a href="#s04" data-t="s04"><span class="n">04</span><span>Ownership</span></a></li>
+          <li><a href="#s05" data-t="s05"><span class="n">05</span><span>Applicability</span></a></li>
+          <li><a href="#s06" data-t="s06"><span class="n">06</span><span>Notes / FAQ</span></a></li>
+          <li><a href="#s07" data-t="s07"><span class="n">07</span><span>Register interest</span></a></li>
+        </ol>
+        <div class="foot">
+          Kiln builds one model per customer, by hand, during pre-beta.<br><br>
+          Enquiries:<br>
+          <a href="mailto:gao.skyler@icloud.com?subject=Kiln%20—%20enquiry">gao.skyler@icloud.com</a>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+
+      <!-- 00 ABSTRACT / HERO -->
+      <section id="s00" class="abstract">
+        <div class="clause">
+          <span class="no">§00</span><h2>Abstract</h2><span class="dots"></span><span class="pg">p.1</span>
+        </div>
+        <div class="kicker"><span class="tick"></span>Pre-beta · first cohort forming</div>
+        <h1>A small model that is <em>yours</em> beats a giant one you only rent.</h1>
+        <p class="h1-sub">Kiln trains a private, specialist language model on your examples, then hands it back. You own it outright and run it on your own hardware. No API meter, no data leaving your control.</p>
+
+        <div class="abs-grid">
+          <div class="lede-block">
+            <p>Most teams reach for one enormous general model behind someone else's API. It is impressive, and it is a rental: every request is metered, every prompt travels off-site, and the thing doing your most sensitive work answers to a vendor, not to you.</p>
+            <p>For a narrow, repeated job — the same class of document, the same extraction, the same translation into your internal format — you do not need general genius. You need a model that has seen <em>your</em> task ten thousand times and nothing else. That model is small enough to own, and small enough to run where the data already lives.</p>
+            <div class="term" aria-hidden="false">
+              <div><span class="p">you@workstation</span> <span class="c">~/models $</span> <span class="g" id="typeline"></span><span class="cursor"></span></div>
+            </div>
+            <div class="term-cap">Fig. 0 — the model is a local file. It answers offline.</div>
+          </div>
+
+          <aside class="kv" aria-label="At a glance">
+            <div class="r"><div class="k">Deliverable</div><div class="v">One fine-tuned model, <b>owned by you</b> — weights in hand.</div></div>
+            <div class="r"><div class="k">You provide</div><div class="v">Examples of the task + a base model to specialise.</div></div>
+            <div class="r"><div class="k">Runs on</div><div class="v">Your servers, your laptops, your edge boxes. Offline.</div></div>
+            <div class="r"><div class="k">Data path</div><div class="v"><b>Stays with you</b>. Nothing is metered or sent upstream at inference.</div></div>
+            <div class="r"><div class="k">Cost model</div><div class="v">Built once. No per-token bill for using what you own.</div></div>
+            <div class="r"><div class="k">Status</div><div class="v">Pre-beta. Not for sale yet — early access only.</div></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 01 THESIS -->
+      <section id="s01">
+        <div class="clause">
+          <span class="no">§01</span><h2>Thesis</h2><span class="dots"></span><span class="pg">p.2</span>
+        </div>
+        <div class="prose" style="margin-bottom:22px">
+          <p>Renting one giant model is the right default when you don't yet know what you need. It stops being the right default the moment a task becomes <strong>narrow, repeated, and sensitive</strong> — which is exactly the shape of most real production work. At that point the general model is overqualified, over-priced, and over-exposed to your data.</p>
+        </div>
+        <div class="compare">
+          <div class="col rent">
+            <h3>One rented general model</h3>
+            <div class="big">Broad. Metered. Off-site.</div>
+            <ul>
+              <li>Every call is billed; cost grows with success</li>
+              <li>Your prompts and outputs leave your perimeter</li>
+              <li>Behaviour can change under you without notice</li>
+              <li>Carries capability you pay for and never use</li>
+              <li>Needs the network to answer at all</li>
+            </ul>
+          </div>
+          <div class="col own">
+            <h3>Many small owned specialists</h3>
+            <div class="big">Narrow. Fixed. In-house.</div>
+            <ul>
+              <li>Built once — no per-token bill to use it</li>
+              <li>Data and inference stay inside your walls</li>
+              <li>Frozen weights: it behaves the same next year</li>
+              <li>Sized to the job, so it runs on modest hardware</li>
+              <li>Answers with the network unplugged</li>
+            </ul>
+          </div>
+        </div>
+        <p class="muted" style="font-size:12.5px;margin-top:14px">The claim is not that small models are smarter. It is that for a fixed task, an owned specialist is <em>cheaper, private, and permanent</em> — and you can keep a shelf of them.</p>
+      </section>
+
+      <!-- 02 TOPOLOGY / DIAGRAM -->
+      <section id="s02">
+        <div class="clause">
+          <span class="no">§02</span><h2>Topology</h2><span class="dots"></span><span class="pg">p.3</span>
+        </div>
+        <div class="prose" style="margin-bottom:20px">
+          <p>The rented topology routes every task, from every team, out through one shared meter. The owned topology keeps each task on a dedicated small model that lives next to the work.</p>
+        </div>
+        <figure class="vizbox" aria-label="Interactive diagram. Left: one large rented model, off-site and metered, whose reach-lines sweep toward everything. Right: a constellation of small specialist models you own and run locally. Move your cursor: the rented giant reaches harder, your own models steady and brighten.">
+          <figcaption class="vhead"><span>Fig. 1 &mdash; one rented giant vs. a model of your own</span><span>move cursor to compare</span></figcaption>
+          <canvas id="viz" aria-hidden="true"></canvas>
+          <div class="vlegend"><span>Rented &middot; general &middot; metered</span><span class="r">Owned &middot; specialist &middot; private</span></div>
+        </figure>
+      </section>
+
+      <!-- 03 PROCEDURE -->
+      <section id="s03">
+        <div class="clause">
+          <span class="no">§03</span><h2>Procedure</h2><span class="dots"></span><span class="pg">p.4</span>
+        </div>
+        <div class="prose" style="margin-bottom:20px">
+          <p>Three moves, high level. You supply the task and choose the starting point; we do the specialising; you take delivery of a model that is yours to run.</p>
+        </div>
+        <div class="steps">
+          <div class="s">
+            <div class="sn">STEP 01 / INPUT</div>
+            <h3>Bring your examples</h3>
+            <p>Show the model the job by example — inputs paired with the outputs you'd sign off on. Hundreds to thousands of real cases teach it your task and your standards.</p>
+          </div>
+          <div class="s">
+            <div class="sn">STEP 02 / BASE</div>
+            <h3>Choose a base</h3>
+            <p>Pick the open model to specialise, sized to where it will run — from something that fits a laptop to something for a single server. Unsure? We advise.</p>
+          </div>
+          <div class="s">
+            <div class="sn">STEP 03 / DELIVERY</div>
+            <h3>Receive a model you own</h3>
+            <p>We hand back the fine-tuned weights. You install it where the data lives and run it offline. It is a file you keep — no dependency on us to use it.</p>
+          </div>
+        </div>
+        <p class="flow-note">input examples ─▶ specialise on your base ─▶ delivered weights ─▶ you run it, forever, for free</p>
+      </section>
+
+      <!-- 04 OWNERSHIP -->
+      <section id="s04">
+        <div class="clause">
+          <span class="no">§04</span><h2>Ownership &amp; privacy</h2><span class="dots"></span><span class="pg">p.5</span>
+        </div>
+        <div class="abs-grid">
+          <div class="prose">
+            <p>"Private" and "owned" are the whole point, so they are not features we can revoke. Ownership means you hold the weights: the model does not phone home, does not expire, and does not change behaviour because a vendor shipped an update.</p>
+            <p>Privacy is structural, not a policy. When the model runs on your hardware, your inputs never leave the building to be answered. The data you were nervous about handing to an API is the data that trains a model you keep to yourself.</p>
+            <p class="muted" style="font-size:13px">This is the difference between a tool you're licensed to touch and an asset that sits on your balance sheet.</p>
+          </div>
+          <aside class="kv" aria-label="Ownership terms">
+            <div class="r"><div class="k">Weights</div><div class="v">Delivered to <b>you</b>. Yours to keep, copy, and deploy.</div></div>
+            <div class="r"><div class="k">Inference</div><div class="v">Runs <b>local &amp; offline</b>. No call leaves your network.</div></div>
+            <div class="r"><div class="k">Longevity</div><div class="v">Frozen. Same answers next year — no drift, no sunset.</div></div>
+            <div class="r"><div class="k">Lock-in</div><div class="v">None. You don't need Kiln to run what Kiln built.</div></div>
+            <div class="r"><div class="k">Your data</div><div class="v">Used to build <b>your</b> model, then it's yours.</div></div>
+          </aside>
+        </div>
+      </section>
+
+      <!-- 05 APPLICABILITY -->
+      <section id="s05">
+        <div class="clause">
+          <span class="no">§05</span><h2>Applicability</h2><span class="dots"></span><span class="pg">p.6</span>
+        </div>
+        <div class="prose" style="margin-bottom:20px">
+          <p>Owning a specialist pays off wherever the task is fixed and the stakes on data, cost, or latency are real. In rough order of who feels it first:</p>
+        </div>
+        <div class="tbl-wrap">
+          <table>
+            <thead>
+              <tr><th>Setting</th><th>Why an owned specialist fits</th></tr>
+            </thead>
+            <tbody>
+              <tr><td>Regulated industries</td><td class="why">Health, finance, legal — where sending records to an outside API is a compliance problem, not a convenience. Keep the model, keep the data in-house.</td></tr>
+              <tr><td>On-premise / air-gapped</td><td class="why">Environments with no outbound internet by design. A model that runs offline is the only kind that runs here at all.</td></tr>
+              <tr><td>Cost at scale</td><td class="why">Millions of similar calls a month. A one-time build replaces a per-token invoice that grows every time the product succeeds.</td></tr>
+              <tr><td>Edge &amp; on-device</td><td class="why">Field hardware, kiosks, vehicles, phones — where a round-trip to a datacentre is too slow, too flaky, or simply unavailable.</td></tr>
+              <tr><td>Domain specialists</td><td class="why">A house dialect, an internal DSL, a narrow classification your team does all day. A model tuned to only that beats a generalist guessing at it.</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </section>
+
+      <!-- 06 FAQ -->
+      <section id="s06">
+        <div class="clause">
+          <span class="no">§06</span><h2>Notes &amp; FAQ</h2><span class="dots"></span><span class="pg">p.7</span>
+        </div>
+        <div class="faq" id="faq">
+          <div class="item">
+            <button class="q" aria-expanded="false">
+              <span class="fn">Q1</span>
+              <span class="qt"><span>Will a small model actually be good enough?</span><span class="sign">+</span></span>
+            </button>
+            <div class="a"><div><p>For a narrow, well-defined task, usually yes — often better than a general model, because it has been trained on that task and nothing else. It won't write poetry or answer trivia. That's the trade: it does one job the way you'd do it, and does it locally. If your task genuinely needs open-ended general reasoning, we'll tell you a specialist is the wrong tool.</p></div></div>
+          </div>
+          <div class="item">
+            <button class="q" aria-expanded="false">
+              <span class="fn">Q2</span>
+              <span class="qt"><span>What do you do with my data?</span><span class="sign">+</span></span>
+            </button>
+            <div class="a"><div><p>Your examples are used to build your model, and that's all. We don't pool them, we don't train other customers' models on them, and the finished model is yours. Once it's delivered it runs entirely on your hardware — the data you'd be worried about is the data that never has to leave.</p></div></div>
+          </div>
+          <div class="item">
+            <button class="q" aria-expanded="false">
+              <span class="fn">Q3</span>
+              <span class="qt"><span>What hardware do I need to run it?</span><span class="sign">+</span></span>
+            </button>
+            <div class="a"><div><p>It depends on the base you choose. Smaller models run comfortably on a single modern GPU, and some on a capable laptop; larger ones want a server-class card. We size the recommendation to where you intend to deploy, so you're not buying a datacentre to run one specialist.</p></div></div>
+          </div>
+          <div class="item">
+            <button class="q" aria-expanded="false">
+              <span class="fn">Q4</span>
+              <span class="qt"><span>How many examples do I have to bring?</span><span class="sign">+</span></span>
+            </button>
+            <div class="a"><div><p>More clean examples make a better model, but "clean" matters more than "many". A few hundred well-chosen, correctly-labelled cases can go a long way; thousands is better. If you're not sure what you have is enough, send a sample and we'll give you an honest read before you commit.</p></div></div>
+          </div>
+          <div class="item">
+            <button class="q" aria-expanded="false">
+              <span class="fn">Q5</span>
+              <span class="qt"><span>Do I stay dependent on Kiln afterwards?</span><span class="sign">+</span></span>
+            </button>
+            <div class="a"><div><p>No. The deliverable is the model itself — weights you hold and run without us in the loop. You can come back to retrain as your task evolves, but nothing about using what we built requires an ongoing relationship, a licence check, or a live connection.</p></div></div>
+          </div>
+          <div class="item">
+            <button class="q" aria-expanded="false">
+              <span class="fn">Q6</span>
+              <span class="qt"><span>Can I really order one today?</span><span class="sign">+</span></span>
+            </button>
+            <div class="a"><div><p>Not yet — Kiln is in pre-beta and every model is being built by hand for a small first cohort. This page is the specification, not a storefront. If the fit is right, email us to be considered for early access; we'll be honest about timelines before you count on anything.</p></div></div>
+          </div>
+        </div>
+      </section>
+
+      <!-- 07 REGISTER -->
+      <section id="s07" class="register">
+        <div class="clause">
+          <span class="no">§07</span><h2>Register interest</h2><span class="dots"></span><span class="pg">p.8</span>
+        </div>
+        <div class="reg-grid">
+          <div>
+            <h3>The first cohort is forming. <em>Ask to be in it.</em></h3>
+            <p>We're taking on a small number of early customers by hand while Kiln is in pre-beta. This isn't a checkout — it's a conversation. Tell us the task you'd want a specialist for and roughly the shape of the data behind it, and we'll tell you honestly whether it's a fit and what to expect.</p>
+            <p>Write to <a href="mailto:gao.skyler@icloud.com?subject=Kiln%20—%20early%20access&amp;body=The%20task%20I'd%20want%20a%20specialist%20model%20for%3A%0A%0AShape%20of%20my%20data%20(rough)%3A%0A%0AWhere%20I'd%20run%20it%3A%0A">gao.skyler@icloud.com</a> — a couple of sentences is plenty to start.</p>
+          </div>
+          <div class="cta-card">
+            <div class="cl">Early access · KLN-001</div>
+            <a class="mailbtn" href="mailto:gao.skyler@icloud.com?subject=Kiln%20—%20early%20access&amp;body=The%20task%20I'd%20want%20a%20specialist%20model%20for%3A%0A%0AShape%20of%20my%20data%20(rough)%3A%0A%0AWhere%20I'd%20run%20it%3A%0A">Email to join the list →</a>
+            <div class="cohort">
+              <div>Intake<b>By hand</b></div>
+              <div>Stage<b><span class="lit">Pre-beta</span></b></div>
+              <div>Cost now<b>Nothing</b></div>
+            </div>
+            <p class="cta-fine">No account, no card, no commitment. You're joining a waitlist and starting a conversation — not buying a model today.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+</div>
+
+<footer class="colophon">
+  <span>© 2026 Kiln — built to order</span>
+  <span>KLN-001 · REV 0.9 · Pre-beta · Specification, not an offer of sale</span>
+</footer>
+
+<script>
+  // --- typed terminal line (single line, no fake-log spam) ---
+  (function(){
+    var el = document.getElementById("typeline");
+    if(!el) return;
+    var full = "kiln run ./intake-classifier.gguf --local --offline";
+    var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
+    if(reduce){ el.textContent = full; return; }
+    var i = 0;
+    function step(){
+      el.textContent = full.slice(0, i);
+      i++;
+      if(i <= full.length) setTimeout(step, 34 + Math.random()*36);
+    }
+    // start after a short beat
+    setTimeout(step, 520);
+  })();
+
+  // --- FAQ accordion ---
+  document.querySelectorAll("#faq .item").forEach(function(item){
+    var btn = item.querySelector(".q");
+    btn.addEventListener("click", function(){
+      var open = item.classList.toggle("open");
+      btn.setAttribute("aria-expanded", open ? "true" : "false");
+    });
+  });
+
+  // --- scroll-spy on the section index ---
+  (function(){
+    var links = {};
+    document.querySelectorAll("nav.index a[data-t]").forEach(function(a){ links[a.dataset.t] = a; });
+    var secs = document.querySelectorAll("main section[id]");
+    if(!("IntersectionObserver" in window)) return;
+    var io = new IntersectionObserver(function(entries){
+      entries.forEach(function(e){
+        if(e.isIntersecting){
+          Object.values(links).forEach(function(a){ a.classList.remove("on"); });
+          var a = links[e.target.id];
+          if(a) a.classList.add("on");
+        }
+      });
+    }, { rootMargin: "-45% 0px -50% 0px", threshold: 0 });
+    secs.forEach(function(s){ io.observe(s); });
+  })();
+</script>
+<script>
+(function(){
+  var cv=document.getElementById('viz'); if(!cv) return;
+  var ctx=cv.getContext('2d');
+  var W=0,H=0,DPR=Math.min(window.devicePixelRatio||1,2);
+  var reduce=window.matchMedia&&window.matchMedia('(prefers-reduced-motion:reduce)').matches;
+  var COL={line:'rgba(47,93,98,0.18)',mono:'#34372e',monoRing:'rgba(52,55,46,0.26)',spec:'#2f5d62',specSoft:'#4d8087',faint:'rgba(22,24,28,0.06)'};
+  var mono,specialists=[],reaches=[];
+  function layout(){
+    var r=cv.getBoundingClientRect(); W=r.width; H=r.height;
+    cv.width=Math.round(W*DPR); cv.height=Math.round(H*DPR); ctx.setTransform(DPR,0,0,DPR,0,0);
+    mono={x:W*0.26,y:H*0.5,r:Math.max(24,Math.min(W,H)*0.15)};
+    var seeds=[[0.66,0.30],[0.80,0.22],[0.90,0.40],[0.72,0.52],[0.85,0.58],[0.63,0.66],[0.78,0.74],[0.92,0.70],[0.70,0.84],[0.86,0.86],[0.60,0.46],[0.95,0.55]];
+    specialists=seeds.map(function(s,i){return {bx:W*s[0],by:H*s[1],x:W*s[0],y:H*s[1],r:3.2+((i*37)%5)*0.9,ph:(i*1.7)%(Math.PI*2)};});
+    reaches=[]; for(var k=0;k<14;k++){var a=(k/14)*Math.PI*2; reaches.push({a:a,len:0.4+((k*53)%7)/10,sp:0.4+((k*29)%5)/8,ph:(k*0.9)%(Math.PI*2)});}
+  }
+  layout(); window.addEventListener('resize',layout);
+  var mx=-999,my=-999,haveP=false;
+  cv.addEventListener('pointermove',function(e){var r=cv.getBoundingClientRect(); mx=e.clientX-r.left; my=e.clientY-r.top; haveP=true;});
+  cv.addEventListener('pointerleave',function(){haveP=false;mx=-999;my=-999;});
+  var t=0;
+  function frame(){
+    t+=reduce?0:0.012; ctx.clearRect(0,0,W,H);
+    ctx.strokeStyle=COL.faint; ctx.lineWidth=1; ctx.beginPath(); ctx.moveTo(W*0.5,H*0.12); ctx.lineTo(W*0.5,H*0.88); ctx.stroke();
+    var agitate=haveP?1.0:0.5; ctx.lineWidth=1;
+    for(var i=0;i<reaches.length;i++){
+      var R=reaches[i]; var ang=R.a+Math.sin(t*R.sp+R.ph)*0.28*agitate;
+      var reach=R.len*Math.max(W,H)*0.5*(0.75+0.25*Math.sin(t*0.7+R.ph));
+      var ex=mono.x+Math.cos(ang)*reach, ey=mono.y+Math.sin(ang)*reach; var SEG=7;
+      for(var s2=0;s2<SEG;s2++){var f0=s2/SEG,f1=(s2+1)/SEG;
+        ctx.strokeStyle='rgba(52,55,46,'+(0.26*(1-f0)*(1-f0))+')'; ctx.beginPath();
+        ctx.moveTo(mono.x+(ex-mono.x)*f0,mono.y+(ey-mono.y)*f0); ctx.lineTo(mono.x+(ex-mono.x)*f1,mono.y+(ey-mono.y)*f1); ctx.stroke();}
+    }
+    var pulse=0.5+0.5*Math.sin(t*0.9);
+    ctx.beginPath(); ctx.arc(mono.x,mono.y,mono.r+6+pulse*3,0,Math.PI*2); ctx.strokeStyle=COL.monoRing; ctx.lineWidth=1; ctx.stroke();
+    ctx.beginPath(); ctx.arc(mono.x,mono.y,mono.r,0,Math.PI*2); ctx.fillStyle=COL.mono; ctx.fill();
+    ctx.beginPath(); ctx.arc(mono.x,mono.y,mono.r*0.42,0,Math.PI*2); ctx.fillStyle='#f4f2ec'; ctx.fill();
+    ctx.strokeStyle=COL.line; ctx.lineWidth=1;
+    for(var a2=0;a2<specialists.length;a2++){for(var b=a2+1;b<specialists.length;b++){
+      var dx=specialists[a2].x-specialists[b].x, dy=specialists[a2].y-specialists[b].y; var d=Math.sqrt(dx*dx+dy*dy);
+      if(d<W*0.16){ctx.globalAlpha=1-(d/(W*0.16)); ctx.beginPath(); ctx.moveTo(specialists[a2].x,specialists[a2].y); ctx.lineTo(specialists[b].x,specialists[b].y); ctx.stroke();}
+    }} ctx.globalAlpha=1;
+    for(var n=0;n<specialists.length;n++){var S=specialists[n];
+      var driftx=Math.cos(t*0.5+S.ph)*4, drifty=Math.sin(t*0.4+S.ph*1.3)*4; var tx=S.bx+driftx, ty=S.by+drifty;
+      if(haveP){var pdx=mx-S.bx,pdy=my-S.by; var pd=Math.sqrt(pdx*pdx+pdy*pdy); var calm=Math.max(0,1-pd/(W*0.32)); tx=S.bx+driftx*(1-calm); ty=S.by+drifty*(1-calm);}
+      S.x+=(tx-S.x)*0.08; S.y+=(ty-S.y)*0.08;
+      var glow=haveP?Math.max(0,1-Math.hypot(mx-S.x,my-S.y)/(W*0.28)):0;
+      if(glow>0.02){ctx.beginPath(); ctx.arc(S.x,S.y,S.r+5,0,Math.PI*2); ctx.fillStyle='rgba(77,128,135,'+(0.20*glow)+')'; ctx.fill();}
+      ctx.beginPath(); ctx.arc(S.x,S.y,S.r,0,Math.PI*2); ctx.fillStyle=glow>0.35?COL.specSoft:COL.spec; ctx.fill();
+    }
+    if(!reduce) requestAnimationFrame(frame);
+  }
+  requestAnimationFrame(frame);
+})();
+</script>
+</body>
+</html>
