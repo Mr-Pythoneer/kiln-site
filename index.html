@@ -3,311 +3,94 @@
 <head>
 <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>Kiln — Private, custom AI is the future</title>
-<meta name="description" content="The era of renting one giant model that sees all your data is ending. Kiln forges small, private, specialist models you own and run on your own hardware." />
-<meta property="og:title" content="Kiln — Private, custom AI is the future" />
-<meta property="og:description" content="Small, specialist models you own. Fine-tuned to one job. Running on hardware you control." />
-<meta property="og:type" content="website" />
+<title>Kiln</title>
+<meta name="description" content="Kiln — private, custom language models, built to order. Currently in pre-beta." />
 <style>
   :root{
-    --bg:#0c0a09; --bg2:#141010; --panel:#171211;
-    --ink:#f3ece4; --muted:#a89b8d; --faint:#6f645a;
-    --ember:#ff6a2b; --ember2:#ffb055; --glow:#ff7a30;
-    --line:rgba(255,255,255,.08);
-    --maxw:1080px;
-    --serif:ui-serif,"Iowan Old Style",Georgia,"Times New Roman",serif;
-    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --paper:#f2efe8;
+    --ink:#191712;
+    --muted:#6f685c;
+    --faint:#a49c8c;
+    --rule:#d9d3c6;
+    --accent:#8a2d1f;                 /* one restrained mark of colour */
+    --mono:"SFMono-Regular",ui-monospace,"Menlo","Consolas",monospace;
+    --sans:"Helvetica Neue",Inter,ui-sans-serif,system-ui,-apple-system,"Segoe UI",Arial,sans-serif;
   }
-  *{box-sizing:border-box}
-  html{scroll-behavior:smooth}
+  *{box-sizing:border-box;margin:0;padding:0}
+  html,body{height:100%}
   body{
-    margin:0;background:var(--bg);color:var(--ink);
-    font-family:var(--sans);line-height:1.6;
-    -webkit-font-smoothing:antialiased;overflow-x:hidden;
+    background:var(--paper);color:var(--ink);font-family:var(--sans);
+    -webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;
+    display:flex;flex-direction:column;min-height:100%;
+    padding:clamp(22px,5vw,56px);
   }
-  a{color:inherit}
-  .wrap{max-width:var(--maxw);margin:0 auto;padding:0 24px}
+  a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--faint);
+    transition:border-color .18s,color .18s}
+  a:hover{border-color:var(--ink)}
 
-  /* ---- ambient ember glow ---- */
-  .glowfield{position:fixed;inset:0;z-index:0;pointer-events:none;overflow:hidden}
-  .glowfield::before,.glowfield::after{
-    content:"";position:absolute;border-radius:50%;filter:blur(80px);opacity:.5;
-  }
-  .glowfield::before{
-    width:60vw;height:60vw;top:-18vw;right:-14vw;
-    background:radial-gradient(circle,rgba(255,106,43,.32),transparent 62%);
-    animation:drift 18s ease-in-out infinite alternate;
-  }
-  .glowfield::after{
-    width:46vw;height:46vw;bottom:-16vw;left:-12vw;
-    background:radial-gradient(circle,rgba(255,176,85,.14),transparent 60%);
-    animation:drift 22s ease-in-out infinite alternate-reverse;
-  }
-  @keyframes drift{from{transform:translateY(-12px) scale(1)}to{transform:translateY(18px) scale(1.08)}}
+  .sheet{width:100%;max-width:940px;margin:0 auto;flex:1;display:flex;flex-direction:column}
 
-  /* ---- nav ---- */
-  header{position:relative;z-index:3}
-  nav{display:flex;align-items:center;justify-content:space-between;padding:22px 24px;max-width:var(--maxw);margin:0 auto}
-  .brand{display:flex;align-items:center;gap:11px;font-weight:800;letter-spacing:.14em;font-size:15px}
-  .mark{width:22px;height:22px;display:inline-block}
-  .navlinks{display:flex;gap:26px;font-size:14px;color:var(--muted)}
-  .navlinks a{text-decoration:none;transition:color .2s}
-  .navlinks a:hover{color:var(--ink)}
-  @media(max-width:640px){.navlinks{display:none}}
+  /* letterhead */
+  .top{display:flex;justify-content:space-between;align-items:baseline;
+    padding-bottom:16px;border-bottom:1px solid var(--rule)}
+  .word{font-weight:600;letter-spacing:.34em;font-size:14px;text-transform:uppercase}
+  .word .dot{color:var(--accent)}
+  .tag{font-family:var(--mono);font-size:11.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--muted)}
 
-  /* ---- hero ---- */
-  .hero{position:relative;z-index:2;padding:72px 0 40px;text-align:center}
-  .eyebrow{
-    display:inline-block;font-size:12.5px;letter-spacing:.22em;text-transform:uppercase;
-    color:var(--ember2);border:1px solid var(--line);border-radius:999px;
-    padding:7px 15px;margin-bottom:30px;background:rgba(255,106,43,.06)
-  }
-  h1{
-    font-family:var(--serif);font-weight:600;
-    font-size:clamp(40px,7.2vw,78px);line-height:1.04;letter-spacing:-.02em;
-    margin:0 auto 22px;max-width:14ch
-  }
-  h1 .fire{
-    background:linear-gradient(100deg,var(--ember),var(--ember2));
-    -webkit-background-clip:text;background-clip:text;color:transparent;
-  }
-  .lede{font-size:clamp(17px,2.4vw,21px);color:var(--muted);max-width:60ch;margin:0 auto 36px}
-  .cta{display:flex;gap:14px;justify-content:center;flex-wrap:wrap}
-  .btn{
-    display:inline-block;text-decoration:none;font-weight:600;font-size:15px;
-    padding:13px 24px;border-radius:11px;transition:transform .15s,box-shadow .2s,background .2s
-  }
-  .btn-primary{
-    color:#1a0d05;background:linear-gradient(100deg,var(--ember),var(--ember2));
-    box-shadow:0 10px 34px -12px rgba(255,106,43,.7)
-  }
-  .btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 40px -12px rgba(255,106,43,.85)}
-  .btn-ghost{color:var(--ink);border:1px solid var(--line);background:rgba(255,255,255,.02)}
-  .btn-ghost:hover{border-color:rgba(255,176,85,.45);transform:translateY(-2px)}
+  /* body */
+  main{flex:1;display:flex;flex-direction:column;justify-content:center;padding:8vh 0}
+  .index{font-family:var(--mono);font-size:12px;letter-spacing:.2em;color:var(--faint);margin-bottom:26px}
+  h1{font-weight:600;letter-spacing:-.022em;line-height:1.04;
+    font-size:clamp(34px,6.4vw,68px);max-width:16ch}
+  h1 em{font-style:normal;color:var(--accent)}
+  .lede{margin-top:26px;max-width:52ch;color:var(--muted);font-size:clamp(16px,2vw,19px);line-height:1.5}
 
-  /* ---- section scaffold ---- */
-  section{position:relative;z-index:2}
-  .band{padding:64px 0}
-  .kicker{font-size:12.5px;letter-spacing:.2em;text-transform:uppercase;color:var(--faint);margin-bottom:14px}
-  h2{font-family:var(--serif);font-weight:600;font-size:clamp(28px,4vw,40px);letter-spacing:-.01em;line-height:1.12;margin:0 0 16px}
-  .section-lede{color:var(--muted);max-width:64ch;font-size:17px}
+  .meta{margin-top:56px;display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));
+    gap:22px 40px;border-top:1px solid var(--rule);padding-top:26px}
+  .meta .k{font-family:var(--mono);font-size:11px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint);margin-bottom:7px}
+  .meta .v{font-size:15px;line-height:1.5;color:var(--ink)}
 
-  /* ---- manifesto pillars ---- */
-  .pillars{display:grid;grid-template-columns:repeat(2,1fr);gap:18px;margin-top:40px}
-  @media(max-width:720px){.pillars{grid-template-columns:1fr}}
-  .pill{
-    background:linear-gradient(180deg,var(--panel),rgba(20,16,16,.4));
-    border:1px solid var(--line);border-radius:16px;padding:26px 24px;
-    transition:transform .2s,border-color .2s
-  }
-  .pill:hover{transform:translateY(-3px);border-color:rgba(255,176,85,.3)}
-  .pill .n{font-family:var(--serif);font-size:15px;color:var(--ember2);margin-bottom:12px;letter-spacing:.04em}
-  .pill h3{font-size:19px;margin:0 0 8px;font-weight:700}
-  .pill p{margin:0;color:var(--muted);font-size:15px}
-
-  /* ---- how it works ---- */
-  .flow{display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:center;gap:10px;margin-top:40px}
-  @media(max-width:760px){.flow{grid-template-columns:1fr;gap:16px}.arrow{transform:rotate(90deg);justify-self:center}}
-  .node{
-    background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:22px 20px;text-align:center;height:100%
-  }
-  .node .ic{font-size:22px;margin-bottom:10px}
-  .node h4{margin:0 0 6px;font-size:16px}
-  .node p{margin:0;color:var(--muted);font-size:13.5px}
-  .arrow{color:var(--ember);font-size:22px;justify-self:center}
-
-  /* ---- use cases ---- */
-  .uses{display:grid;grid-template-columns:repeat(3,1fr);gap:16px;margin-top:36px}
-  @media(max-width:720px){.uses{grid-template-columns:1fr}}
-  .use{border:1px solid var(--line);border-radius:14px;padding:22px;background:rgba(255,255,255,.015)}
-  .use h4{margin:0 0 6px;font-size:16px}
-  .use p{margin:0;color:var(--muted);font-size:14px}
-
-  /* ---- pull quote ---- */
-  .quote{padding:80px 0;text-align:center}
-  .quote blockquote{
-    font-family:var(--serif);font-size:clamp(24px,3.6vw,38px);line-height:1.25;
-    letter-spacing:-.01em;margin:0 auto;max-width:20ch;font-weight:600
-  }
-  .quote .fire{background:linear-gradient(100deg,var(--ember),var(--ember2));-webkit-background-clip:text;background-clip:text;color:transparent}
-
-  /* ---- final cta ---- */
-  .final{
-    text-align:center;padding:70px 30px;margin:20px 0 60px;border-radius:24px;
-    border:1px solid var(--line);
-    background:
-      radial-gradient(120% 140% at 50% 0%,rgba(255,106,43,.14),transparent 60%),
-      linear-gradient(180deg,var(--bg2),var(--bg))
-  }
-  .final h2{margin-bottom:12px}
-  .final p{color:var(--muted);max-width:52ch;margin:0 auto 28px}
-
-  /* ---- footer ---- */
-  footer{border-top:1px solid var(--line);padding:34px 0;color:var(--faint);font-size:13.5px;position:relative;z-index:2}
-  footer .wrap{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:12px}
-
-  /* reveal on scroll */
-  .reveal{opacity:0;transform:translateY(20px);transition:opacity .7s ease,transform .7s ease}
-  .reveal.in{opacity:1;transform:none}
-  @media(prefers-reduced-motion:reduce){
-    .reveal{opacity:1;transform:none;transition:none}
-    .glowfield::before,.glowfield::after{animation:none}
-  }
+  footer{display:flex;justify-content:space-between;align-items:center;flex-wrap:wrap;gap:10px;
+    padding-top:20px;border-top:1px solid var(--rule);
+    font-family:var(--mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--faint)}
 </style>
 </head>
 <body>
-<div class="glowfield" aria-hidden="true"></div>
-
-<header>
-  <nav>
-    <span class="brand">
-      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
-        <path d="M12 2c1.6 3 .3 4.6-.8 6C9.7 9.9 9 11.3 9 13a3 3 0 0 0 6 .2c1 1 .9 2.3.4 3.4 2-1 3.1-3.2 3.1-5.6 0-3.2-2-5-3-6.4-.2 1.3-.9 2-1.7 2.4C13.9 5.6 14.2 3.6 12 2Z" fill="url(#g)"/>
-        <path d="M6 14c-.6 1-.9 2.2-.9 3.4C5.1 20.5 8 22 12 22s6.9-1.5 6.9-4.6c0-.7-.1-1.4-.4-2.1-.6 3-3.4 4.2-6.5 4.2S6.2 17.9 6 14Z" fill="url(#g)" opacity=".55"/>
-        <defs><linearGradient id="g" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#ff6a2b"/><stop offset="1" stop-color="#ffb055"/></linearGradient></defs>
-      </svg>
-      KILN
-    </span>
-    <div class="navlinks">
-      <a href="#why">Why</a>
-      <a href="#how">How it works</a>
-      <a href="#uses">Use cases</a>
-      <a href="order.html">Order a model</a>
+  <div class="sheet">
+    <div class="top">
+      <span class="word">Kiln<span class="dot">.</span></span>
+      <span class="tag">Pre-beta · 2026</span>
     </div>
-  </nav>
-</header>
 
-<main>
-  <section class="hero wrap">
-    <span class="eyebrow">Own the model. Own the data.</span>
-    <h1>Private, custom AI is the <span class="fire">future</span>.</h1>
-    <p class="lede">
-      The era of renting one giant model that sees everything you type is ending.
-      What comes next is small, specialist models — fine-tuned to a single job,
-      owned by you, running on hardware you control. Kiln forges them.
-    </p>
-    <div class="cta">
-      <a class="btn btn-primary" href="order.html">Order a model</a>
-      <a class="btn btn-ghost" href="#why">Read the thesis</a>
-    </div>
-  </section>
-
-  <section id="why" class="band wrap">
-    <div class="reveal">
-      <div class="kicker">The thesis</div>
-      <h2>Renting a giant brain is a temporary arrangement.</h2>
-      <p class="section-lede">
-        Frontier models are extraordinary — and they are also a metered pipe your data
-        flows through, priced per token, rate-limited, and changed without your consent.
-        For most real work you don't need a model that can do everything. You need one
-        that does <em>your</em> thing, perfectly, privately, forever.
+    <main>
+      <div class="index">001 — Coming soon</div>
+      <h1>Private language models, <em>built to order.</em></h1>
+      <p class="lede">
+        Kiln trains small, specialist models on your data and hands them back as
+        yours — private, owned outright, run on your own hardware. It's being built
+        quietly right now. Invitations open soon.
       </p>
-    </div>
 
-    <div class="pillars">
-      <div class="pill reveal">
-        <div class="n">01</div>
-        <h3>Your data never leaves the building</h3>
-        <p>Trained and run on your own GPU. No third-party API, no telemetry, no copies of your data sitting on someone else's servers. Private by construction, not by policy.</p>
+      <div class="meta">
+        <div>
+          <div class="k">Status</div>
+          <div class="v">In pre-beta. Public intake opens in a few weeks.</div>
+        </div>
+        <div>
+          <div class="k">Enquiries</div>
+          <div class="v"><a href="mailto:gao.skyler@icloud.com?subject=Kiln">gao.skyler@icloud.com</a></div>
+        </div>
+        <div>
+          <div class="k">Early access</div>
+          <div class="v">Email to be put on the list for the first cohort.</div>
+        </div>
       </div>
-      <div class="pill reveal">
-        <div class="n">02</div>
-        <h3>Specialists beat generalists — at one job</h3>
-        <p>A small model tuned to a single task can match or beat a giant general model on that task, at a fraction of the cost and latency. Narrow is a feature, not a limitation.</p>
-      </div>
-      <div class="pill reveal">
-        <div class="n">03</div>
-        <h3>You own the weights</h3>
-        <p>The output is a file you keep. Run it offline on Linux, macOS, or Windows for as long as you like. No per-token bill, no rug-pull, no rate limit, no vendor lock.</p>
-      </div>
-      <div class="pill reveal">
-        <div class="n">04</div>
-        <h3>One GPU is enough</h3>
-        <p>Built to fine-tune capable models on a single consumer graphics card — and honest, up front, about what will and won't fit before you spend hours training it.</p>
-      </div>
-    </div>
-  </section>
+    </main>
 
-  <section id="how" class="band wrap">
-    <div class="reveal">
-      <div class="kicker">How it works</div>
-      <h2>Config in. A model you own, out.</h2>
-      <p class="section-lede">
-        You bring examples of the task and choose a base model. Kiln does the rest —
-        and hands you back something portable you can run anywhere.
-      </p>
-    </div>
-    <div class="flow reveal">
-      <div class="node">
-        <div class="ic">📁</div>
-        <h4>Point it at your data</h4>
-        <p>Your input→output examples and a base model, described in one small config.</p>
-      </div>
-      <div class="arrow">→</div>
-      <div class="node">
-        <div class="ic">🔥</div>
-        <h4>Kiln forges it</h4>
-        <p>It fine-tunes on your GPU, then grades the result against <em>your</em> definition of correct.</p>
-      </div>
-      <div class="arrow">→</div>
-      <div class="node">
-        <div class="ic">📦</div>
-        <h4>Take the model</h4>
-        <p>A portable model you run locally — offline, private, and entirely yours.</p>
-      </div>
-    </div>
-  </section>
-
-  <section class="quote wrap">
-    <blockquote class="reveal">
-      The future isn't one model to rule them all.<br>
-      It's a thousand small <span class="fire">fires</span>, each tuned to its work.
-    </blockquote>
-  </section>
-
-  <section id="uses" class="band wrap">
-    <div class="reveal">
-      <div class="kicker">Where it shines</div>
-      <h2>Built for narrow, high-value work.</h2>
-    </div>
-    <div class="uses">
-      <div class="use reveal"><h4>Code &amp; DSL generation</h4><p>Turn plain English into your language, config, or domain-specific format — reliably, and in your own style.</p></div>
-      <div class="use reveal"><h4>Structured extraction</h4><p>Pull clean, schema-valid data out of messy text, on-device, without shipping records to a cloud API.</p></div>
-      <div class="use reveal"><h4>Domain assistants</h4><p>A model that speaks your product, your codebase, or your field — because it was trained on exactly that.</p></div>
-      <div class="use reveal"><h4>Regulated &amp; on-prem</h4><p>Healthcare, legal, finance, defense — anywhere the data simply cannot leave the premises.</p></div>
-      <div class="use reveal"><h4>Edge &amp; offline</h4><p>Small enough to run on a laptop or a device in the field, with no connection required.</p></div>
-      <div class="use reveal"><h4>Cost at scale</h4><p>Replace a per-token bill on a repetitive task with a model you paid for once and run forever.</p></div>
-    </div>
-  </section>
-
-  <section id="access" class="wrap">
-    <div class="final reveal">
-      <div class="kicker" style="color:var(--ember2)">Early access · Beta</div>
-      <h2>Forge your own intelligence.</h2>
-      <p>Kiln is a custom fine-tuning service for teams who want private, specialist models instead of another metered API. Tell us the job; we'll forge the model.</p>
-      <a class="btn btn-primary" href="order.html">Order a model</a>
-      <p style="margin-top:16px;font-size:14px;color:var(--faint)">or email <a href="mailto:gao.skyler@icloud.com?subject=Kiln%20enquiry" style="color:var(--ember2);text-decoration:none">gao.skyler@icloud.com</a></p>
-    </div>
-  </section>
-</main>
-
-<footer>
-  <div class="wrap">
-    <span>© 2026 Kiln. All rights reserved.</span>
-    <span>Private, custom AI — forged on your own hardware.</span>
+    <footer>
+      <span>© 2026 Kiln</span>
+      <span>Built to order</span>
+    </footer>
   </div>
-</footer>
-
-<script>
-  // Reveal-on-scroll — progressive enhancement only.
-  (function(){
-    var els = document.querySelectorAll('.reveal');
-    if(!('IntersectionObserver' in window)){els.forEach(function(e){e.classList.add('in')});return;}
-    var io = new IntersectionObserver(function(entries){
-      entries.forEach(function(en){ if(en.isIntersecting){ en.target.classList.add('in'); io.unobserve(en.target); } });
-    },{threshold:.12});
-    els.forEach(function(e){io.observe(e)});
-  })();
-</script>
 </body>
 </html>
