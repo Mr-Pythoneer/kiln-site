@@ -1,0 +1,325 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Order a model — Kiln</title>
+<meta name="description" content="Order a private, custom fine-tuned model. Pick a base, describe your task and data, get an estimate." />
+<meta name="robots" content="noindex" />
+<style>
+  :root{
+    --bg:#0c0a09; --panel:#151110; --panel2:#1b1614; --ink:#f3ece4; --muted:#a89b8d;
+    --faint:#6f645a; --ember:#ff6a2b; --ember2:#ffb055; --ok:#57c98a; --bad:#ff6f6f;
+    --line:rgba(255,255,255,.09);
+    --sans:ui-sans-serif,system-ui,-apple-system,"Segoe UI",Roboto,Helvetica,Arial,sans-serif;
+    --serif:ui-serif,"Iowan Old Style",Georgia,serif;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);line-height:1.55;
+    background-image:radial-gradient(60vw 40vw at 92% -10%,rgba(255,106,43,.13),transparent 60%);
+    background-attachment:fixed;-webkit-font-smoothing:antialiased}
+  a{color:var(--ember2)}
+  .wrap{max-width:820px;margin:0 auto;padding:26px 20px 90px}
+  header{display:flex;align-items:center;justify-content:space-between;margin-bottom:22px}
+  .brand{display:flex;align-items:center;gap:10px;font-weight:800;letter-spacing:.14em;font-size:15px;text-decoration:none;color:var(--ink)}
+  .mark{width:22px;height:22px}
+  .back{font-size:14px;text-decoration:none;color:var(--muted)}
+  .back:hover{color:var(--ink)}
+
+  h1{font-family:var(--serif);font-weight:600;font-size:clamp(30px,5vw,44px);letter-spacing:-.02em;margin:6px 0 8px}
+  .sub{color:var(--muted);font-size:17px;max-width:56ch;margin:0 0 26px}
+
+  .card{border:1px solid var(--line);border-radius:16px;padding:22px;margin:16px 0;background:linear-gradient(180deg,var(--panel),rgba(21,17,16,.5))}
+  .card h2{font-size:18px;margin:0 0 4px;display:flex;align-items:center;gap:10px}
+  .card .num{width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:700;color:#1a0d05;background:linear-gradient(120deg,var(--ember),var(--ember2))}
+  .card .hint{color:var(--faint);font-size:13px;margin:0 0 6px}
+
+  /* beta gate */
+  .gate{border-color:rgba(255,176,85,.35);background:linear-gradient(180deg,rgba(255,106,43,.07),rgba(21,17,16,.5))}
+  .gate p{color:var(--muted);font-size:14.5px;margin:8px 0}
+  .agree{display:flex;gap:12px;align-items:flex-start;margin-top:14px;padding:14px;border:1px solid var(--line);border-radius:11px;background:var(--panel2);cursor:pointer}
+  .agree input{margin-top:3px;width:18px;height:18px;accent-color:var(--ember)}
+  .agree span{font-size:14.5px}
+
+  .locked{opacity:.4;pointer-events:none;filter:saturate(.5)}
+  label{display:block;font-size:13px;color:var(--muted);margin:14px 0 6px}
+  select,input[type=text],input[type=email],textarea{width:100%;padding:11px 13px;border-radius:10px;border:1px solid var(--line);
+    background:var(--panel2);color:var(--ink);font-size:14px;font-family:inherit}
+  textarea{min-height:78px;resize:vertical}
+  select:focus,input:focus,textarea:focus{outline:none;border-color:rgba(255,176,85,.55)}
+  .row{display:flex;gap:14px;flex-wrap:wrap}.row>*{flex:1;min-width:180px}
+  .req{color:var(--ember2)}
+  .radio{display:flex;gap:10px;flex-wrap:wrap;margin-top:6px}
+  .radio label{display:flex;align-items:center;gap:8px;margin:0;padding:9px 13px;border:1px solid var(--line);border-radius:10px;background:var(--panel2);cursor:pointer;color:var(--ink);font-size:14px}
+  .radio input{accent-color:var(--ember)}
+
+  /* estimate */
+  .est{position:sticky;bottom:14px;margin-top:22px;border:1px solid rgba(255,176,85,.35);border-radius:16px;
+    padding:20px 22px;background:linear-gradient(180deg,var(--panel2),#120f0e);box-shadow:0 14px 40px -20px rgba(255,106,43,.6)}
+  .est .lab{font-size:12.5px;letter-spacing:.16em;text-transform:uppercase;color:var(--faint)}
+  .est .amt{font-family:var(--serif);font-size:34px;margin:4px 0 2px}
+  .est .amt .fire{background:linear-gradient(100deg,var(--ember),var(--ember2));-webkit-background-clip:text;background-clip:text;color:transparent}
+  .est .fine{color:var(--muted);font-size:13px}
+  .btn{display:inline-block;border:0;cursor:pointer;font-weight:600;font-size:15px;font-family:inherit;text-decoration:none;
+    padding:13px 24px;border-radius:11px;color:#1a0d05;margin-top:16px;
+    background:linear-gradient(100deg,var(--ember),var(--ember2));box-shadow:0 10px 30px -14px rgba(255,106,43,.8)}
+  .btn:disabled{filter:grayscale(.7) brightness(.7);cursor:not-allowed;box-shadow:none}
+  .btn-ghost{color:var(--ink);background:transparent;border:1px solid var(--line);box-shadow:none;margin-left:8px}
+
+  .done{display:none;text-align:center;padding:40px 20px}
+  .done.show{display:block}
+  .done .big{font-size:40px}
+  .done h2{font-family:var(--serif);font-weight:600;font-size:28px;margin:10px 0}
+  .done p{color:var(--muted);max-width:52ch;margin:0 auto 10px}
+  .foot{color:var(--faint);font-size:12.5px;margin-top:30px;text-align:center}
+</style>
+</head>
+<body>
+<div class="wrap" id="app">
+  <header>
+    <a class="brand" href="index.html">
+      <svg class="mark" viewBox="0 0 24 24" fill="none" aria-hidden="true">
+        <path d="M12 2c1.6 3 .3 4.6-.8 6C9.7 9.9 9 11.3 9 13a3 3 0 0 0 6 .2c1 1 .9 2.3.4 3.4 2-1 3.1-3.2 3.1-5.6 0-3.2-2-5-3-6.4-.2 1.3-.9 2-1.7 2.4C13.9 5.6 14.2 3.6 12 2Z" fill="url(#g)"/>
+        <defs><linearGradient id="g" x1="4" y1="2" x2="20" y2="22" gradientUnits="userSpaceOnUse"><stop stop-color="#ff6a2b"/><stop offset="1" stop-color="#ffb055"/></linearGradient></defs>
+      </svg>KILN
+    </a>
+    <a class="back" href="index.html">← Home</a>
+  </header>
+
+  <div id="form">
+    <h1>Order a custom model</h1>
+    <p class="sub">Pick a base, tell us the job and the data, and get a ballpark estimate. You approve a final quote before anything is charged.</p>
+
+    <!-- BETA GATE -->
+    <div class="card gate">
+      <h2>Before you start — this is a beta</h2>
+      <p>Kiln is an early-beta, hand-forged service. Every model is trained to order by a human, so <b>turnaround can take several weeks to a few months</b>. Estimates here are a rough ballpark — you'll get a <b>final quote before any payment</b>, and nothing is charged until you approve it. While we're in beta we can't guarantee specific accuracy targets.</p>
+      <label class="agree">
+        <input type="checkbox" id="agree" />
+        <span>I understand this is a beta project, that results may take a few months, and that the amount below is an estimate — not a final price.</span>
+      </label>
+    </div>
+
+    <!-- gated body -->
+    <div id="body" class="locked">
+      <!-- 1: model -->
+      <div class="card">
+        <h2><span class="num">1</span> Your model</h2>
+        <p class="hint">The base we fine-tune. Not sure? Pick "Help me choose".</p>
+        <div class="row">
+          <div>
+            <label>Base model</label>
+            <select id="base"></select>
+          </div>
+          <div>
+            <label>Model size <span class="req">(sets the estimate)</span></label>
+            <select id="size">
+              <option value="small">Small — up to ~4B (fastest, cheapest)</option>
+              <option value="medium" selected>Medium — 7–9B</option>
+              <option value="large">Large — 12–14B (best quality in range)</option>
+              <option value="xl">Extra-large — ~32B</option>
+            </select>
+          </div>
+        </div>
+        <label>…or a custom Hugging Face model id (optional)</label>
+        <input type="text" id="customBase" placeholder="e.g. unsloth/Qwen2.5-Coder-32B-Instruct-bnb-4bit" />
+        <div class="row">
+          <div>
+            <label>What will you use it for? <span class="req">*</span></label>
+            <select id="usecase">
+              <option value="">Choose…</option>
+              <option>Code / DSL generation</option>
+              <option>Structured data extraction</option>
+              <option>Domain-specific assistant</option>
+              <option>Text classification / tagging</option>
+              <option>Something else</option>
+            </select>
+          </div>
+          <div>
+            <label>A sentence more about the task</label>
+            <input type="text" id="usecaseDetail" placeholder="e.g. English → our internal config DSL" />
+          </div>
+        </div>
+      </div>
+
+      <!-- 2: data -->
+      <div class="card">
+        <h2><span class="num">2</span> Your training data</h2>
+        <p class="hint">Input → output examples of the task. More, cleaner examples = a better model.</p>
+        <div class="row">
+          <div>
+            <label>Roughly how many examples? <span class="req">(affects the estimate)</span></label>
+            <select id="data">
+              <option value="s">Under 500</option>
+              <option value="m" selected>500 – 2,000</option>
+              <option value="l">2,000 – 10,000</option>
+              <option value="xl">10,000+</option>
+            </select>
+          </div>
+          <div>
+            <label>How will you share the data?</label>
+            <div class="radio">
+              <label><input type="radio" name="delivery" value="link" checked /> I have a link</label>
+              <label><input type="radio" name="delivery" value="later" /> I'll send it after ordering</label>
+            </div>
+          </div>
+        </div>
+        <label>Link to your dataset (optional — Drive/Dropbox/etc.)</label>
+        <input type="text" id="dataLink" placeholder="https://…" />
+        <label>Anything else we should know?</label>
+        <textarea id="notes" placeholder="Format, quirks, deadlines, target accuracy, licensing constraints…"></textarea>
+      </div>
+
+      <!-- 3: you -->
+      <div class="card">
+        <h2><span class="num">3</span> You</h2>
+        <p class="hint">So we can send your quote and prepayment link. We don't share your details.</p>
+        <div class="row">
+          <div><label>Name <span class="req">*</span></label><input type="text" id="name" placeholder="Your name" /></div>
+          <div><label>Email <span class="req">*</span></label><input type="email" id="email" placeholder="you@company.com" /></div>
+          <div><label>Company (optional)</label><input type="text" id="company" placeholder="Company" /></div>
+        </div>
+      </div>
+
+      <!-- estimate + submit -->
+      <div class="est">
+        <div class="lab">Estimated total · beta</div>
+        <div class="amt" id="amount"><span class="fire">$—</span></div>
+        <div class="fine" id="fine">A rough ballpark. You'll get a firm quote before paying — nothing is charged now.</div>
+        <button class="btn" id="submit" disabled>Submit order request</button>
+        <a class="btn btn-ghost" href="index.html">Not now</a>
+      </div>
+    </div>
+  </div>
+
+  <!-- confirmation -->
+  <div class="done" id="done">
+    <div class="big">🔥</div>
+    <h2>Your order request is on its way.</h2>
+    <p id="doneMsg"></p>
+    <p id="payWrap" style="display:none"><a class="btn" id="payBtn" href="#">Prepay deposit now</a></p>
+    <p><a href="index.html">← Back to home</a></p>
+  </div>
+
+  <div class="foot">Kiln · private, custom AI — forged on your own hardware. Beta.</div>
+</div>
+
+<script>
+  // ============================================================================
+  //  CONFIG — set these when you're ready to take real orders.
+  // ============================================================================
+  const CONTACT_EMAIL = "gao.skyler@icloud.com";
+  // Optional form backend (Formspree / Getform / Basin URL). Empty ⇒ the submit
+  // button composes a pre-filled email to CONTACT_EMAIL instead (works with no signup).
+  const FORM_ENDPOINT = "";
+  // Optional Stripe Payment Link / Gumroad URL for instant prepay. Empty ⇒ we tell the
+  // customer you'll email a payment link after review (recommended for variable pricing).
+  const PAYMENT_LINK = "";
+  // ---- EDIT THESE NUMBERS before launch. Illustrative beta pricing only. ----
+  const PRICING = {
+    sizeBase: { small: 400, medium: 650, large: 950, xl: 1600 }, // by model size
+    dataAdd:  { s: 0, m: 150, l: 400, xl: 900 },                 // by dataset size
+    rangePct: 0.2,                                               // show estimate as ±20%
+    currency: "$",
+  };
+  // Recommended bases (label → id + default size tier).
+  const MODELS = [
+    { id: "help", label: "Help me choose", size: "medium" },
+    { id: "unsloth/Qwen2.5-Coder-7B-Instruct-bnb-4bit",  label: "Qwen2.5-Coder-7B (code)",  size: "medium" },
+    { id: "unsloth/Qwen2.5-Coder-14B-Instruct-bnb-4bit", label: "Qwen2.5-Coder-14B (code)", size: "large" },
+    { id: "unsloth/Qwen3-8B",                            label: "Qwen3-8B (general)",       size: "medium" },
+    { id: "unsloth/Meta-Llama-3.1-8B-Instruct-bnb-4bit", label: "Llama-3.1-8B (general)",   size: "medium" },
+    { id: "unsloth/gemma-2-9b-it-bnb-4bit",              label: "Gemma-2-9B (general)",     size: "medium" },
+  ];
+  // ============================================================================
+
+  const $ = s => document.querySelector(s);
+  const money = n => PRICING.currency + Math.round(n).toLocaleString();
+
+  // populate models
+  $("#base").innerHTML = MODELS.map(m => `<option value="${m.id}" data-size="${m.size}">${m.label}</option>`).join("");
+  $("#base").addEventListener("change", e => {
+    const s = e.target.selectedOptions[0].dataset.size;
+    if (s) $("#size").value = s;
+    estimate();
+  });
+
+  function estimate(){
+    const size = $("#size").value, data = $("#data").value;
+    const base = PRICING.sizeBase[size] ?? 0;
+    const add  = PRICING.dataAdd[data] ?? 0;
+    const mid = base + add;
+    const lo = Math.round(mid * (1 - PRICING.rangePct));
+    const hi = Math.round(mid * (1 + PRICING.rangePct));
+    $("#amount").innerHTML = `<span class="fire">${money(lo)} – ${money(hi)}</span>`;
+    return { lo, hi, mid };
+  }
+
+  // gate
+  const body = $("#body"), submit = $("#submit");
+  function refresh(){
+    const agreed = $("#agree").checked;
+    body.classList.toggle("locked", !agreed);
+    const ready = agreed && $("#usecase").value && $("#name").value.trim() && /.+@.+\..+/.test($("#email").value);
+    submit.disabled = !ready;
+  }
+  ["#agree","#usecase","#name","#email","#size","#data"].forEach(s => {
+    $(s).addEventListener("input", () => { refresh(); estimate(); });
+    $(s).addEventListener("change", () => { refresh(); estimate(); });
+  });
+
+  function orderSummary(est){
+    const base = $("#customBase").value.trim() || $("#base").selectedOptions[0].label;
+    const delivery = document.querySelector('input[name=delivery]:checked').value;
+    return [
+      "KILN — ORDER REQUEST",
+      "",
+      "Name:      " + $("#name").value,
+      "Email:     " + $("#email").value,
+      "Company:   " + ($("#company").value || "—"),
+      "",
+      "Base model:  " + base,
+      "Model size:  " + $("#size").selectedOptions[0].text,
+      "Use case:    " + $("#usecase").value + ($("#usecaseDetail").value ? " — " + $("#usecaseDetail").value : ""),
+      "Dataset:     " + $("#data").selectedOptions[0].text,
+      "Data share:  " + (delivery === "link" ? ("link: " + ($("#dataLink").value || "(none given)")) : "will send after ordering"),
+      "Notes:       " + ($("#notes").value || "—"),
+      "",
+      "Estimate:    " + money(est.lo) + " – " + money(est.hi) + " (beta ballpark)",
+      "Agreed to beta terms: yes",
+    ].join("\n");
+  }
+
+  submit.addEventListener("click", async () => {
+    const est = estimate();
+    const summary = orderSummary(est);
+    const name = $("#name").value.trim();
+    submit.disabled = true; submit.textContent = "Sending…";
+
+    let sent = false;
+    if (FORM_ENDPOINT){
+      try{
+        const r = await fetch(FORM_ENDPOINT, {method:"POST",headers:{"Content-Type":"application/json"},
+          body: JSON.stringify({ summary, name, email:$("#email").value })});
+        sent = r.ok;
+      }catch(e){ sent = false; }
+    }
+    if (!sent){
+      // No backend configured (or it failed): open a pre-filled email. Works everywhere.
+      const subject = encodeURIComponent("Kiln order — " + name);
+      const bodyTxt = encodeURIComponent(summary);
+      window.location.href = `mailto:${CONTACT_EMAIL}?subject=${subject}&body=${bodyTxt}`;
+    }
+
+    // confirmation
+    $("#form").style.display = "none";
+    $("#doneMsg").textContent = `Thanks, ${name}. ${FORM_ENDPOINT && sent ? "We've got your request." : "Your email app should have opened with your order — just hit send."} Skyler will review and email you a final quote (est. ${money(est.lo)}–${money(est.hi)}) plus a secure prepayment link. Nothing is charged yet.`;
+    if (PAYMENT_LINK){ $("#payWrap").style.display="block"; $("#payBtn").href = PAYMENT_LINK; }
+    $("#done").classList.add("show");
+    window.scrollTo(0,0);
+  });
+
+  estimate();
+</script>
+</body>
+</html>
