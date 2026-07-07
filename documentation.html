@@ -240,6 +240,14 @@
   .vizbox .vlegend .r{color:var(--accent)}
   .vizbox canvas{display:block;width:100%;height:360px;touch-action:pan-y}
   @media(max-width:640px){.vizbox canvas{height:300px}.vizbox .vhead,.vizbox .vlegend{font-size:10px;letter-spacing:.08em}}
+
+  /* ------- glossary definition list ------- */
+  .defs{border-top:1px solid var(--ink)}
+  .defs .d{display:grid;grid-template-columns:210px 1fr;gap:18px;padding:14px 0;border-bottom:1px solid var(--rule)}
+  .defs .d:last-child{border-bottom:0}
+  .defs dt{font-family:var(--mono);font-weight:700;font-size:13.5px;color:var(--ink);letter-spacing:-.01em}
+  .defs dd{margin:0;font-family:var(--sans);font-size:14px;color:#3a3d43;line-height:1.6;max-width:72ch}
+  @media(max-width:640px){.defs .d{grid-template-columns:1fr;gap:4px}}
 </style>
 </head>
 <body>
@@ -266,239 +274,326 @@
 
   <div class="body-wrap">
 
-    <!-- FIXED INDEX -->
     <nav class="index">
       <div class="sticky">
         <div class="lbl">Contents</div>
         <ol>
-          <li><a href="#s00" data-t="s00"><span class="n">00</span><span>Abstract</span></a></li>
-          <li><a href="#s01" data-t="s01"><span class="n">01</span><span>Thesis</span></a></li>
+          <li><a href="#s00" data-t="s00"><span class="n">00</span><span>Overview</span></a></li>
+          <li><a href="#s01" data-t="s01"><span class="n">01</span><span>Own, don't rent</span></a></li>
           <li><a href="#s02" data-t="s02"><span class="n">02</span><span>Topology</span></a></li>
-          <li><a href="#s03" data-t="s03"><span class="n">03</span><span>Procedure</span></a></li>
-          <li><a href="#s04" data-t="s04"><span class="n">04</span><span>Ownership</span></a></li>
-          <li><a href="#s05" data-t="s05"><span class="n">05</span><span>Applicability</span></a></li>
-          <li><a href="#s06" data-t="s06"><span class="n">06</span><span>Notes / FAQ</span></a></li>
-          <li><a href="#s07" data-t="s07"><span class="n">07</span><span>Register interest</span></a></li>
+          <li><a href="#s03" data-t="s03"><span class="n">03</span><span>How it works</span></a></li>
+          <li><a href="#s04" data-t="s04"><span class="n">04</span><span>Your data</span></a></li>
+          <li><a href="#s05" data-t="s05"><span class="n">05</span><span>Model & runtime</span></a></li>
+          <li><a href="#s06" data-t="s06"><span class="n">06</span><span>Evaluation</span></a></li>
+          <li><a href="#s07" data-t="s07"><span class="n">07</span><span>Delivery</span></a></li>
+          <li><a href="#s08" data-t="s08"><span class="n">08</span><span>Ownership</span></a></li>
+          <li><a href="#s09" data-t="s09"><span class="n">09</span><span>Where it fits</span></a></li>
+          <li><a href="#s10" data-t="s10"><span class="n">10</span><span>Engagement</span></a></li>
+          <li><a href="#s11" data-t="s11"><span class="n">11</span><span>FAQ</span></a></li>
+          <li><a href="#s12" data-t="s12"><span class="n">12</span><span>Glossary</span></a></li>
+          <li><a href="#s13" data-t="s13"><span class="n">13</span><span>Register interest</span></a></li>
         </ol>
-        <div class="foot">
-          Kiln builds one model per customer, by hand, during pre-beta.<br><br>
-          Enquiries:<br>
-          <a href="mailto:gao.skyler@icloud.com?subject=Kiln%20—%20enquiry">gao.skyler@icloud.com</a>
-        </div>
+        <div class="foot">Kiln builds one model per customer, by hand, during pre-beta.<br><br>Enquiries:<br>gao.skyler@icloud.com</div>
       </div>
     </nav>
 
     <main>
+<section id="s00">
+  <div class="clause"><span class="no">§00</span><h2>Overview</h2><span class="dots"></span><span class="pg">p.1</span></div>
+  <div class="prose">
+    <p>Kiln is a done-for-you service that builds <em>one private, specialist model</em> for one job you do over and over. You bring examples of the task done right; we specialise an open base model on those examples and hand back a model that is yours. Not an account, not an API key with a meter running — a file you keep, run, and control.</p>
+    <p>It is for the narrow, repeated, sensitive work that a giant general chatbot handles well enough but that you would rather not ship off-site every time: classifying tickets, extracting fields from your own documents, rewriting into your house style, drafting the same kind of structured output a hundred times a day. A model that only does your task can be small, fast, and cheap to run — and because it runs on your hardware, the data never leaves.</p>
+    <p>What you walk away with is <em>open weights delivered as a single GGUF file</em>, sized to where you plan to run it, plus what you need to run it locally with Ollama or llama.cpp. No dependency on us afterward. If you never talk to Kiln again, the model keeps working exactly as it did the day we handed it over.</p>
+  </div>
+  <aside class="kv">
+    <div class="r"><div class="k">WHAT IT IS</div><div class="v">A done-for-you service that trains <b>one private, specialist model</b> for a single task you repeat.</div></div>
+    <div class="r"><div class="k">WHAT YOU PROVIDE</div><div class="v">Examples of your task done the way you want it done — the more representative, the better.</div></div>
+    <div class="r"><div class="k">WHAT YOU GET BACK</div><div class="v">Open weights as a <b>GGUF file you own</b>, quantized to your size-vs-quality choice, ready to run.</div></div>
+    <div class="r"><div class="k">WHERE IT RUNS</div><div class="v">On your own hardware, <b>offline</b>, via Ollama or llama.cpp. No account, no meter, no callback home.</div></div>
+    <div class="r"><div class="k">YOUR DATA</div><div class="v">Used only to build your model, never shared, <b>deleted on request</b>. The weights are yours to license as you see fit.</div></div>
+    <div class="r"><div class="k">COST NOW</div><div class="v"><b>Nothing</b> — pre-beta.</div></div>
+    <div class="r"><div class="k">STAGE</div><div class="v"><b>Pre-beta, by hand.</b> Each model is built one at a time, in close contact with you.</div></div>
+  </aside>
+</section>
 
-      <!-- 00 ABSTRACT / HERO -->
-      <section id="s00" class="abstract">
-        <div class="clause">
-          <span class="no">§00</span><h2>Abstract</h2><span class="dots"></span><span class="pg">p.1</span>
-        </div>
-        <div class="kicker"><span class="tick"></span>Pre-beta · first cohort forming</div>
-        <h1>A small model that is <em>yours</em> beats a giant one you only rent.</h1>
-        <p class="h1-sub">Kiln trains a private, specialist language model on your examples, then hands it back. You own it outright and run it on your own hardware. No API meter, no data leaving your control.</p>
+<section id="s01">
+  <div class="clause"><span class="no">§01</span><h2>Own it, don't rent it</h2><span class="dots"></span><span class="pg">p.2</span></div>
+  <div class="prose">
+    <p>The reflex, when you need a model to do something, is to reach for a general endpoint in the cloud. For open-ended work that reflex is right. For a <em>narrow, repeated, sensitive job</em> it is the wrong default — you are renting a vast general-purpose system to do one small thing, paying per call to do it, and sending your data to someone else's machine every single time to get it done.</p>
+    <p>A model that only has to do your task doesn't need to be vast. Specialised on your examples, a small model can match or beat the general endpoint on the one thing you care about, run on hardware you already own, and cost nothing per call because there is no call — it's just a program running locally. And it doesn't drift: the endpoint you rent can change under you next week, but <em>a model you own is frozen</em> at the behavior you tested and signed off on.</p>
+  </div>
+  <div class="compare">
+    <div class="col">
+      <h3>THE RENTED ENDPOINT</h3>
+      <div class="big">Someone else's model, metered</div>
+      <ul>
+        <li>Billed per call, forever — cost scales with use</li>
+        <li>Your data leaves the building on every request</li>
+        <li>General-purpose, carrying weight you never use</li>
+        <li>Can change or be deprecated without your say</li>
+        <li>Needs a network and their servers to work at all</li>
+      </ul>
+    </div>
+    <div class="col own">
+      <h3>AN OWNED SPECIALIST</h3>
+      <div class="big">Your model, yours to run</div>
+      <ul>
+        <li>Free to run — no meter, no per-call cost</li>
+        <li>Runs local and offline; data never leaves</li>
+        <li>Specialised on your task, small and fast</li>
+        <li>Frozen at the behavior you tested and approved</li>
+        <li>A file you keep, license, and control outright</li>
+      </ul>
+    </div>
+  </div>
+</section>
 
-        <div class="abs-grid">
-          <div class="lede-block">
-            <p>Most teams reach for one enormous general model behind someone else's API. It is impressive, and it is a rental: every request is metered, every prompt travels off-site, and the thing doing your most sensitive work answers to a vendor, not to you.</p>
-            <p>For a narrow, repeated job — the same class of document, the same extraction, the same translation into your internal format — you do not need general genius. You need a model that has seen <em>your</em> task ten thousand times and nothing else. That model is small enough to own, and small enough to run where the data already lives.</p>
-            <div class="term" aria-hidden="false">
-              <div><span class="p">you@workstation</span> <span class="c">~/models $</span> <span class="g" id="typeline"></span><span class="cursor"></span></div>
-            </div>
-            <div class="term-cap">Fig. 0 — the model is a local file. It answers offline.</div>
-          </div>
-
-          <aside class="kv" aria-label="At a glance">
-            <div class="r"><div class="k">Deliverable</div><div class="v">One fine-tuned model, <b>owned by you</b> — weights in hand.</div></div>
-            <div class="r"><div class="k">You provide</div><div class="v">Examples of the task + a base model to specialise.</div></div>
-            <div class="r"><div class="k">Runs on</div><div class="v">Your servers, your laptops, your edge boxes. Offline.</div></div>
-            <div class="r"><div class="k">Data path</div><div class="v"><b>Stays with you</b>. Nothing is metered or sent upstream at inference.</div></div>
-            <div class="r"><div class="k">Cost model</div><div class="v">Built once. No per-token bill for using what you own.</div></div>
-            <div class="r"><div class="k">Status</div><div class="v">Pre-beta. Not for sale yet — early access only.</div></div>
-          </aside>
-        </div>
-      </section>
-
-      <!-- 01 THESIS -->
-      <section id="s01">
-        <div class="clause">
-          <span class="no">§01</span><h2>Thesis</h2><span class="dots"></span><span class="pg">p.2</span>
-        </div>
-        <div class="prose" style="margin-bottom:22px">
-          <p>Renting one giant model is the right default when you don't yet know what you need. It stops being the right default the moment a task becomes <strong>narrow, repeated, and sensitive</strong> — which is exactly the shape of most real production work. At that point the general model is overqualified, over-priced, and over-exposed to your data.</p>
-        </div>
-        <div class="compare">
-          <div class="col rent">
-            <h3>One rented general model</h3>
-            <div class="big">Broad. Metered. Off-site.</div>
-            <ul>
-              <li>Every call is billed; cost grows with success</li>
-              <li>Your prompts and outputs leave your perimeter</li>
-              <li>Behaviour can change under you without notice</li>
-              <li>Carries capability you pay for and never use</li>
-              <li>Needs the network to answer at all</li>
-            </ul>
-          </div>
-          <div class="col own">
-            <h3>Many small owned specialists</h3>
-            <div class="big">Narrow. Fixed. In-house.</div>
-            <ul>
-              <li>Built once — no per-token bill to use it</li>
-              <li>Data and inference stay inside your walls</li>
-              <li>Frozen weights: it behaves the same next year</li>
-              <li>Sized to the job, so it runs on modest hardware</li>
-              <li>Answers with the network unplugged</li>
-            </ul>
-          </div>
-        </div>
-        <p class="muted" style="font-size:12.5px;margin-top:14px">The claim is not that small models are smarter. It is that for a fixed task, an owned specialist is <em>cheaper, private, and permanent</em> — and you can keep a shelf of them.</p>
-      </section>
-
-      <!-- 02 TOPOLOGY / DIAGRAM -->
-      <section id="s02">
-        <div class="clause">
-          <span class="no">§02</span><h2>Topology</h2><span class="dots"></span><span class="pg">p.3</span>
-        </div>
+<section id="s02">
+        <div class="clause"><span class="no">§02</span><h2>Topology</h2><span class="dots"></span><span class="pg">p.3</span></div>
         <div class="prose" style="margin-bottom:20px">
-          <p>The rented topology routes every task, from every team, out through one shared meter. The owned topology keeps each task on a dedicated small model that lives next to the work.</p>
+          <p>The rented topology routes every task, from every team, out through one shared meter, off-site. The owned topology keeps each task on a dedicated small model that lives next to the work. Move your cursor across the figure to feel the difference.</p>
         </div>
-        <figure class="vizbox" aria-label="Interactive diagram. Left: one large rented model, off-site and metered, whose reach-lines sweep toward everything. Right: a constellation of small specialist models you own and run locally. Move your cursor: the rented giant reaches harder, your own models steady and brighten.">
+        <figure class="vizbox" aria-label="Interactive diagram. Left: one large rented model, off-site and metered, whose reach-lines sweep toward everything. Right: a constellation of small specialist models you own and run locally.">
           <figcaption class="vhead"><span>Fig. 1 &mdash; one rented giant vs. a model of your own</span><span>move cursor to compare</span></figcaption>
           <canvas id="viz" aria-hidden="true"></canvas>
           <div class="vlegend"><span>Rented &middot; general &middot; metered</span><span class="r">Owned &middot; specialist &middot; private</span></div>
         </figure>
       </section>
 
-      <!-- 03 PROCEDURE -->
-      <section id="s03">
-        <div class="clause">
-          <span class="no">§03</span><h2>Procedure</h2><span class="dots"></span><span class="pg">p.4</span>
-        </div>
-        <div class="prose" style="margin-bottom:20px">
-          <p>Three moves, high level. You supply the task and choose the starting point; we do the specialising; you take delivery of a model that is yours to run.</p>
-        </div>
-        <div class="steps">
-          <div class="s">
-            <div class="sn">STEP 01 / INPUT</div>
-            <h3>Bring your examples</h3>
-            <p>Show the model the job by example — inputs paired with the outputs you'd sign off on. Hundreds to thousands of real cases teach it your task and your standards.</p>
-          </div>
-          <div class="s">
-            <div class="sn">STEP 02 / BASE</div>
-            <h3>Choose a base</h3>
-            <p>Pick the open model to specialise, sized to where it will run — from something that fits a laptop to something for a single server. Unsure? We advise.</p>
-          </div>
-          <div class="s">
-            <div class="sn">STEP 03 / DELIVERY</div>
-            <h3>Receive a model you own</h3>
-            <p>We hand back the fine-tuned weights. You install it where the data lives and run it offline. It is a file you keep — no dependency on us to use it.</p>
-          </div>
-        </div>
-        <p class="flow-note">input examples ─▶ specialise on your base ─▶ delivered weights ─▶ you run it, forever, for free</p>
-      </section>
+<section id="s03">
+  <div class="clause"><span class="no">§03</span><h2>How it works</h2><span class="dots"></span><span class="pg">p.4</span></div>
 
-      <!-- 04 OWNERSHIP -->
-      <section id="s04">
-        <div class="clause">
-          <span class="no">§04</span><h2>Ownership &amp; privacy</h2><span class="dots"></span><span class="pg">p.5</span>
-        </div>
-        <div class="abs-grid">
-          <div class="prose">
-            <p>"Private" and "owned" are the whole point, so they are not features we can revoke. Ownership means you hold the weights: the model does not phone home, does not expire, and does not change behaviour because a vendor shipped an update.</p>
-            <p>Privacy is structural, not a policy. When the model runs on your hardware, your inputs never leave the building to be answered. The data you were nervous about handing to an API is the data that trains a model you keep to yourself.</p>
-            <p class="muted" style="font-size:13px">This is the difference between a tool you're licensed to touch and an asset that sits on your balance sheet.</p>
-          </div>
-          <aside class="kv" aria-label="Ownership terms">
-            <div class="r"><div class="k">Weights</div><div class="v">Delivered to <b>you</b>. Yours to keep, copy, and deploy.</div></div>
-            <div class="r"><div class="k">Inference</div><div class="v">Runs <b>local &amp; offline</b>. No call leaves your network.</div></div>
-            <div class="r"><div class="k">Longevity</div><div class="v">Frozen. Same answers next year — no drift, no sunset.</div></div>
-            <div class="r"><div class="k">Lock-in</div><div class="v">None. You don't need Kiln to run what Kiln built.</div></div>
-            <div class="r"><div class="k">Your data</div><div class="v">Used to build <b>your</b> model, then it's yours.</div></div>
-          </aside>
-        </div>
-      </section>
+  <div class="prose" style="margin-bottom:20px">
+    <p>An engagement with Kiln is short and concrete. You come with a narrow task and examples of it done well; we specialise an open base model on those examples and hand back a model you own. There is no platform to log into, no monthly seat, and nothing of yours living on our machines after the work is done.</p>
+    <p>The whole thing runs in three passes: we agree on what we are building, we build it and measure it against your standard, and we deliver the weights for you to run yourself. Most first models go from <em>first conversation</em> to <em>a file on your disk</em> in a matter of days, not months. Here is each pass in order.</p>
+  </div>
 
-      <!-- 05 APPLICABILITY -->
-      <section id="s05">
-        <div class="clause">
-          <span class="no">§05</span><h2>Applicability</h2><span class="dots"></span><span class="pg">p.6</span>
-        </div>
-        <div class="prose" style="margin-bottom:20px">
-          <p>Owning a specialist pays off wherever the task is fixed and the stakes on data, cost, or latency are real. In rough order of who feels it first:</p>
-        </div>
-        <div class="tbl-wrap">
-          <table>
-            <thead>
-              <tr><th>Setting</th><th>Why an owned specialist fits</th></tr>
-            </thead>
-            <tbody>
-              <tr><td>Regulated industries</td><td class="why">Health, finance, legal — where sending records to an outside API is a compliance problem, not a convenience. Keep the model, keep the data in-house.</td></tr>
-              <tr><td>On-premise / air-gapped</td><td class="why">Environments with no outbound internet by design. A model that runs offline is the only kind that runs here at all.</td></tr>
-              <tr><td>Cost at scale</td><td class="why">Millions of similar calls a month. A one-time build replaces a per-token invoice that grows every time the product succeeds.</td></tr>
-              <tr><td>Edge &amp; on-device</td><td class="why">Field hardware, kiosks, vehicles, phones — where a round-trip to a datacentre is too slow, too flaky, or simply unavailable.</td></tr>
-              <tr><td>Domain specialists</td><td class="why">A house dialect, an internal DSL, a narrow classification your team does all day. A model tuned to only that beats a generalist guessing at it.</td></tr>
-            </tbody>
-          </table>
-        </div>
-      </section>
+  <div class="steps">
+    <div class="s">
+      <div class="sn">STEP 01 / SCOPE</div>
+      <h3>We agree on the job</h3>
+      <p>A short conversation about three things: the exact task you want automated, the kind of data you can show us, and the hardware it has to run on. This is also where we are honest with you. If a specialised small model is the wrong tool, or your task is too broad to pin down, we say so before you spend anything.</p>
+    </div>
+    <div class="s">
+      <div class="sn">STEP 02 / BUILD</div>
+      <h3>We specialise and grade</h3>
+      <p>You send your examples. We specialise an open base model on them and test the result against held-out cases it has never seen, scored by <em>your</em> definition of correct rather than a generic benchmark. How we train is our business; what matters to you is that we keep tuning until it clears the bar you set.</p>
+    </div>
+    <div class="s">
+      <div class="sn">STEP 03 / DELIVER</div>
+      <h3>You receive and run it</h3>
+      <p>You get the model weights as a single file plus a short, plain report on how it performed on those held-out cases. You install it and run it yourself, offline, on your own machines. If it needs to get sharper or cover new cases, we can run follow-up rounds.</p>
+    </div>
+  </div>
 
-      <!-- 06 FAQ -->
-      <section id="s06">
-        <div class="clause">
-          <span class="no">§06</span><h2>Notes &amp; FAQ</h2><span class="dots"></span><span class="pg">p.7</span>
-        </div>
-        <div class="faq" id="faq">
-          <div class="item">
-            <button class="q" aria-expanded="false">
-              <span class="fn">Q1</span>
-              <span class="qt"><span>Will a small model actually be good enough?</span><span class="sign">+</span></span>
-            </button>
-            <div class="a"><div><p>For a narrow, well-defined task, usually yes — often better than a general model, because it has been trained on that task and nothing else. It won't write poetry or answer trivia. That's the trade: it does one job the way you'd do it, and does it locally. If your task genuinely needs open-ended general reasoning, we'll tell you a specialist is the wrong tool.</p></div></div>
-          </div>
-          <div class="item">
-            <button class="q" aria-expanded="false">
-              <span class="fn">Q2</span>
-              <span class="qt"><span>What do you do with my data?</span><span class="sign">+</span></span>
-            </button>
-            <div class="a"><div><p>Your examples are used to build your model, and that's all. We don't pool them, we don't train other customers' models on them, and the finished model is yours. Once it's delivered it runs entirely on your hardware — the data you'd be worried about is the data that never has to leave.</p></div></div>
-          </div>
-          <div class="item">
-            <button class="q" aria-expanded="false">
-              <span class="fn">Q3</span>
-              <span class="qt"><span>What hardware do I need to run it?</span><span class="sign">+</span></span>
-            </button>
-            <div class="a"><div><p>It depends on the base you choose. Smaller models run comfortably on a single modern GPU, and some on a capable laptop; larger ones want a server-class card. We size the recommendation to where you intend to deploy, so you're not buying a datacentre to run one specialist.</p></div></div>
-          </div>
-          <div class="item">
-            <button class="q" aria-expanded="false">
-              <span class="fn">Q4</span>
-              <span class="qt"><span>How many examples do I have to bring?</span><span class="sign">+</span></span>
-            </button>
-            <div class="a"><div><p>More clean examples make a better model, but "clean" matters more than "many". A few hundred well-chosen, correctly-labelled cases can go a long way; thousands is better. If you're not sure what you have is enough, send a sample and we'll give you an honest read before you commit.</p></div></div>
-          </div>
-          <div class="item">
-            <button class="q" aria-expanded="false">
-              <span class="fn">Q5</span>
-              <span class="qt"><span>Do I stay dependent on Kiln afterwards?</span><span class="sign">+</span></span>
-            </button>
-            <div class="a"><div><p>No. The deliverable is the model itself — weights you hold and run without us in the loop. You can come back to retrain as your task evolves, but nothing about using what we built requires an ongoing relationship, a licence check, or a live connection.</p></div></div>
-          </div>
-          <div class="item">
-            <button class="q" aria-expanded="false">
-              <span class="fn">Q6</span>
-              <span class="qt"><span>Can I really order one today?</span><span class="sign">+</span></span>
-            </button>
-            <div class="a"><div><p>Not yet — Kiln is in pre-beta and every model is being built by hand for a small first cohort. This page is the specification, not a storefront. If the fit is right, email us to be considered for early access; we'll be honest about timelines before you count on anything.</p></div></div>
-          </div>
-        </div>
-      </section>
+  <p class="flow-note">scope the task &#8594; specialise on your examples &#8594; grade against your standard &#8594; deliver weights you own</p>
 
-      <!-- 07 REGISTER -->
-      <section id="s07" class="register">
-        <div class="clause">
-          <span class="no">§07</span><h2>Register interest</h2><span class="dots"></span><span class="pg">p.8</span>
-        </div>
+  <div class="prose">
+    <p>Nothing here is one-and-done. Your task will drift, your edge cases will multiply, and a good model is one you can revisit. Follow-up rounds fold in new examples and correct the misses you find in real use, so the model tracks the job as the job changes. You are never locked in: because you hold the weights, you can keep running the version you have for as long as it serves you, with or without us.</p>
+  </div>
+</section>
+
+<section id="s04">
+  <div class="clause"><span class="no">§04</span><h2>The data you provide</h2><span class="dots"></span><span class="pg">p.5</span></div>
+
+  <div class="prose" style="margin-bottom:20px">
+    <p>A good dataset is simple to describe: paired examples of your task done the way you would sign off on it. Each example is an <em>input</em> — the thing your model will see in the real world — and the <em>output</em> you want back for it. Nothing more exotic than that. If you can show us a stack of cases where the answer is already right, you have most of what we need.</p>
+    <p>The model learns the pattern in those pairs: your format, your judgement calls, your house style. That means the pairs have to reflect the standard you actually hold, not a rough approximation. The table below is what we look for.</p>
+  </div>
+
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Question</th><th>Guidance</th></tr></thead>
+      <tbody>
+        <tr><td>What a row looks like</td><td class="why">One input paired with the ideal output for it — the exact response, classification, or transformation you would want back. A support ticket and the reply you would approve; a contract clause and the summary you would file.</td></tr>
+        <tr><td>Accepted formats</td><td class="why">JSONL, CSV, or a plain spreadsheet all work. If your examples live in an export from some other system, send it as-is and we help you shape it into pairs.</td></tr>
+        <tr><td>How much</td><td class="why">A few dozen is enough to pilot and see whether the task is learnable. A few hundred to a few thousand gets you a dependable model. Past that, <em>quality beats volume</em> every time — clean examples move the model more than bulk.</td></tr>
+        <tr><td>What makes it good</td><td class="why">Real cases from your actual work, outputs that are genuinely correct, coverage of the edge cases that trip you up, and a consistent style across rows so the model learns one voice instead of several.</td></tr>
+        <tr><td>What to avoid</td><td class="why">Thin data that only shows the easy path, contradictory rows where similar inputs get different answers for no reason, and one-note sets that repeat a single scenario. Any of these teach the model the wrong lesson.</td></tr>
+        <tr><td>How you send it</td><td class="why">Through your own secure link, on your terms. Your data is used only to build your model and is <em>deleted</em> afterward. It never trains anything but the model you are paying for.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="prose">
+    <p>You do not need a perfect, finished dataset to begin. Almost no one has one. Most engagements start from a messy export, a shared drive of past work, or a spreadsheet someone kept by hand — and part of what we do in the early rounds is help you turn what you already have into examples worth training on.</p>
+  </div>
+</section>
+
+<section id="s05">
+  <div class="clause"><span class="no">§05</span><h2>Model size &amp; where it runs</h2><span class="dots"></span><span class="pg">p.6</span></div>
+
+  <div class="prose" style="margin-bottom:20px">
+    <p>Size is a runtime decision, not a vanity one. A bigger model is not automatically a better one for your task, and a model that will not fit the machine you plan to run it on is worth nothing to you. So we work backwards from where the model will live. We start from an open base model sized to that target, specialise it on your examples, and stop at the smallest thing that clears your bar.</p>
+    <p>The win is a model that fits your hardware, runs offline, and gives you the answers you need — <em>not the largest model we could hand you</em>. When a small specialist matches a general giant on the one job you care about, the small specialist wins, because it is cheaper to run and yours to keep.</p>
+  </div>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Runs on</th><th>Rough size</th><th>Good for</th></tr></thead>
+    <tbody>
+      <tr><td>A laptop</td><td>Small</td><td class="why">Quick, on-device, single-user tasks. No server, no network — the model runs next to your work.</td></tr>
+      <tr><td>A workstation or one GPU</td><td>Mid</td><td class="why">The common sweet spot. Room for a strong specialist that still runs on hardware one person or one team already owns.</td></tr>
+      <tr><td>A single server</td><td>Larger</td><td class="why">Heavier reasoning and higher throughput — many requests, longer answers, or a tougher task that a mid model cannot hold.</td></tr>
+      <tr><td>An edge device</td><td>Compact</td><td class="why">Offline and in-the-field. Small footprint for embedded and disconnected settings where every megabyte and watt counts.</td></tr>
+    </tbody>
+  </table></div>
+
+  <div class="prose">
+    <p><strong>Context length</strong> — how much text the model reads at once — is matched to your task, not maxed out for its own sake. A model that classifies short records needs far less than one that reasons over a long document, and a shorter window costs less to run. We size it to what your examples actually demand.</p>
+    <p>You can also receive <em>smaller quantized builds</em> of the same model — lighter files that trade a little quality for a smaller footprint, so you can run on lighter hardware or keep a fast fallback alongside the full-quality build. The size-versus-quality options are defined later in <em>Delivery</em>.</p>
+  </div>
+</section>
+
+<section id="s06">
+  <div class="clause"><span class="no">§06</span><h2>Evaluation &amp; quality</h2><span class="dots"></span><span class="pg">p.7</span></div>
+
+  <div class="prose" style="margin-bottom:20px">
+    <p>Before we specialise anything, we hold back a slice of your examples and keep it sealed — the model never sees it during training. That held-out slice is what we grade against afterwards, so the score reflects how the model does on work it has never encountered, not how well it memorised the examples it was shown.</p>
+    <p>Then we grade its answers against <em>your definition of correct</em>, because "right" means something different for every task. For code, does it run and produce the expected result. For extraction, does the pulled field match the true value. For a domain task, whatever "right" means in your world — the standard is yours, and we grade to it rather than to a generic benchmark.</p>
+  </div>
+
+  <aside class="kv">
+    <div class="r"><div class="k">HELD-OUT TEST</div><div class="v">A slice of your examples is set aside and never trained on. The model is measured only on answers to inputs it has <b>not seen before</b>.</div></div>
+    <div class="r"><div class="k">YOUR DEFINITION OF CORRECT</div><div class="v">We grade to your standard — runs, matches, or otherwise passes — not to an off-the-shelf benchmark that has nothing to do with your task.</div></div>
+    <div class="r"><div class="k">BEFORE &amp; AFTER</div><div class="v">We compare the specialised model to the <b>untouched base model</b> on the same held-out test, so the gain is measured and real, not asserted.</div></div>
+    <div class="r"><div class="k">THE REPORT</div><div class="v">A short, plain quality report ships with the model — what we tested, what we saw, in numbers you can read without a glossary.</div></div>
+    <div class="r"><div class="k">ACCEPTANCE</div><div class="v">You see the numbers <b>before you commit</b>. The result stands on the measurement, not on our say-so.</div></div>
+    <div class="r"><div class="k">HONEST LIMITS</div><div class="v">This is pre-beta. We do not promise a specific score in advance — we run the test and tell you <b>what we actually saw</b>.</div></div>
+  </aside>
+</section>
+
+<section id="s07">
+  <div class="clause"><span class="no">§07</span><h2>Delivery &amp; running your model</h2><span class="dots"></span><span class="pg">p.8</span></div>
+
+  <div class="prose" style="margin-bottom:20px">
+    <p>What you get back is a <strong>model file</strong>, not access to a service. Kiln delivers your specialist as <em>open weights in the GGUF format</em> &mdash; the standard, portable container that the common local runtimes read directly. You download it once and it is yours: a single file you can copy, back up, and put on whatever machine will run it.</p>
+    <p>You run it with the tools you already know. Point <strong>Ollama</strong> at the file, or load it with <strong>llama.cpp</strong> or any compatible runtime, and it answers. There is <em>no account to create, no key to paste, and no internet connection required</em> &mdash; once the file is on your disk, the model runs entirely on your own hardware.</p>
+  </div>
+
+  <div class="term"><span class="p">$</span> <span id="typeline" class="c"></span><span class="cursor"></span></div>
+  <div class="term-cap">your specialist, running on your own machine</div>
+
+  <div class="prose" style="margin-bottom:20px">
+    <p>The same model is delivered in several <strong>builds</strong>. These are quantization levels &mdash; different trade-offs between file size and fidelity of the <em>same</em> specialist. Heavier builds reproduce the trained model more exactly; lighter builds shrink the file and the memory it needs to run, at a small and usually invisible cost. Pick by the hardware you will run on.</p>
+  </div>
+
+  <div class="tbl-wrap"><table>
+    <thead><tr><th>Build</th><th>Size vs quality</th><th>Reach for it when</th></tr></thead>
+    <tbody>
+      <tr><td>Q8_0</td><td class="why">Largest build; effectively lossless against the trained model.</td><td class="why">You want the reference &mdash; the most accurate answers, and you have the memory to spare.</td></tr>
+      <tr><td>Q6_K</td><td class="why">Near-lossless, a touch smaller and lighter than Q8_0.</td><td class="why">You want top-tier quality but would like to trim the footprint.</td></tr>
+      <tr><td>Q5_K_M</td><td class="why">A great balance of size, speed, and fidelity.</td><td class="why">This is the sensible default for most deployments.</td></tr>
+      <tr><td>Q4_K_M</td><td class="why">Smallest common build; roughly <b>97&ndash;99%</b> of full quality.</td><td class="why">You are running on lighter hardware, or want maximum speed and the smallest file.</td></tr>
+    </tbody>
+  </table></div>
+
+  <aside class="kv">
+    <div class="r"><div class="k">FORMAT</div><div class="v">GGUF &mdash; the open, portable standard for local models.</div></div>
+    <div class="r"><div class="k">RUNTIMES</div><div class="v"><b>Ollama</b>, <b>llama.cpp</b>, and compatible tools.</div></div>
+    <div class="r"><div class="k">NETWORK</div><div class="v">None required &mdash; <b>fully offline</b> once the file is on disk.</div></div>
+    <div class="r"><div class="k">HARDWARE</div><div class="v">Roughly: a small model fits a laptop; a mid-size one wants a modern GPU or a capable workstation. <em>We size it with you</em> before you commit.</div></div>
+    <div class="r"><div class="k">UPDATES</div><div class="v">None forced &mdash; it is a file. It does not change under you.</div></div>
+  </aside>
+</section>
+
+<section id="s08">
+  <div class="clause"><span class="no">§08</span><h2>Ownership &amp; privacy</h2><span class="dots"></span><span class="pg">p.9</span></div>
+
+  <div class="prose" style="margin-bottom:20px">
+    <p><em>Ownership</em> here is literal. When Kiln hands back your specialist, you hold the weights &mdash; the actual model file &mdash; with no seat count, no license server, and no runtime that reports to us. You can keep it, copy it across machines, deploy it to a fleet, or archive it for a decade. Nothing you run afterward touches Kiln, and nothing we operate is in the path of your model answering a prompt.</p>
+    <p><em>Privacy</em> follows from where the model runs, not from a promise. Your specialist executes on <strong>your</strong> hardware, next to the data it works on, so sensitive inputs never leave your environment to be processed. There is no API to intercept and no telemetry to leak, because there is no outbound connection at all. Privacy is structural &mdash; a property of the architecture, not a policy you have to trust.</p>
+  </div>
+
+  <aside class="kv">
+    <div class="r"><div class="k">WEIGHTS</div><div class="v">Delivered to <b>you</b> &mdash; keep, copy, deploy, no seat limits.</div></div>
+    <div class="r"><div class="k">INFERENCE</div><div class="v">Runs <b>local &amp; offline</b>; nothing phones home.</div></div>
+    <div class="r"><div class="k">YOUR DATA</div><div class="v">Used only to build <b>your</b> model, then deleted on an agreed schedule; never shared or reused.</div></div>
+    <div class="r"><div class="k">LONGEVITY</div><div class="v">Frozen &mdash; same answers next year; no drift, no sunset.</div></div>
+    <div class="r"><div class="k">LOCK-IN</div><div class="v">None &mdash; you do not need Kiln to keep running what Kiln built.</div></div>
+    <div class="r"><div class="k">LICENCE</div><div class="v">Yours to use, including commercially.</div></div>
+  </aside>
+
+  <div class="prose">
+    <p>The result is <em>an asset you own, not a tool you rent</em> &mdash; a model that sits on your hardware, works without permission, and keeps its value long after the day it was delivered.</p>
+  </div>
+</section>
+
+<section id="s09">
+  <div class="clause"><span class="no">§09</span><h2>Where it fits</h2><span class="dots"></span><span class="pg">p.10</span></div>
+  <div class="prose" style="margin-bottom:20px">
+    <p>A specialist model is not a general assistant. It is the right choice when the work is <em>narrow, repeated, and valuable</em> &mdash; one shape of task you run thousands of times, where getting it right matters and the format is predictable. That is exactly the ground where a small model, trained on your examples, can match or beat a much larger general model while running on hardware you already own.</p>
+    <p>If your need is broad, open-ended conversation across every topic, a frontier general model is the better tool. If it is a specific job done the same way every time, read on.</p>
+  </div>
+  <div class="tbl-wrap">
+    <table>
+      <thead><tr><th>Use case</th><th>The task</th><th>Why a specialist wins</th></tr></thead>
+      <tbody>
+        <tr><td>Code &amp; DSL generation</td><td class="why">Turn plain requests into code, config, or a niche domain language your team uses.</td><td class="why">It learns your dialect and conventions instead of guessing at a generic average.</td></tr>
+        <tr><td>Structured extraction</td><td class="why">Pull clean fields &mdash; dates, amounts, entities &mdash; out of messy documents into strict JSON.</td><td class="why">Trained on your schema, it holds the output shape far more reliably than a prompt.</td></tr>
+        <tr><td>A domain assistant</td><td class="why">Answer questions and draft text inside one field, in your house style and vocabulary.</td><td class="why">It speaks your domain natively rather than hedging like a generalist.</td></tr>
+        <tr><td>Classification &amp; tagging</td><td class="why">Sort tickets, messages, or records into your categories at high volume.</td><td class="why">A small tuned model is fast and cheap enough to run on every item, all day.</td></tr>
+        <tr><td>Regulated / on-prem</td><td class="why">Handle sensitive data where nothing may leave your network or reach a third party.</td><td class="why">You own the weights and run them in-house, so the data never crosses the wire.</td></tr>
+        <tr><td>Edge &amp; offline</td><td class="why">Run useful inference on a laptop, a device, or an air-gapped box with no cloud.</td><td class="why">A right-sized model fits the hardware and keeps working with the network unplugged.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="clause"><span class="no">§10</span><h2>Engagement, timeline &amp; pricing</h2><span class="dots"></span><span class="pg">p.11</span></div>
+  <div class="prose" style="margin-bottom:20px">
+    <p>Kiln is in <em>pre-beta</em>, and we are honest about what that means: every project is run by hand, one at a time, in direct conversation with you. There is no self-serve console and no queue you disappear into. You talk to the person building your model, from the first call to the file landing on your disk.</p>
+    <p>A project moves through a few plain stages. None of them are automated yet, and that is deliberate &mdash; hand-building each model is how we keep the quality bar high while the service is young.</p>
+  </div>
+  <aside class="kv">
+    <div class="r"><div class="k">INTAKE</div><div class="v">A short conversation about the task, your examples, and where you will run the model.</div></div>
+    <div class="r"><div class="k">SCOPING</div><div class="v">We confirm the job is a good fit and tell you <b>honestly</b> if it is not, before any work begins.</div></div>
+    <div class="r"><div class="k">TURNAROUND</div><div class="v">Pre-beta: <b>weeks to a few months</b> &mdash; each model is hand-built, not stamped out.</div></div>
+    <div class="r"><div class="k">ITERATION</div><div class="v">If the first delivery misses your bar, a follow-up round to close the gap.</div></div>
+    <div class="r"><div class="k">SUPPORT</div><div class="v">Hands-on help getting the delivered model running on your own hardware.</div></div>
+  </aside>
+  <div class="prose">
+    <p>On pricing: there is <em>no checkout</em>. Each price is estimated from three things &mdash; the size of the model, how much data the task needs, and how hard the task is. From those we give you a <strong>firm quote to approve before anything is charged</strong>. Nothing is due to join the waitlist or to scope a project; you only pay once you have seen the number and said yes.</p>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="clause"><span class="no">§11</span><h2>FAQ</h2><span class="dots"></span><span class="pg">p.12</span></div>
+  <div class="prose" style="margin-bottom:20px"><p>Straight answers to the questions we get most. Kiln is in <em>pre-beta</em>, so some of these describe how we work today and will tighten as we do.</p></div>
+  <div class="faq" id="faq">
+    <div class="item"><button class="q"><span class="fn">01</span><span class="qt"><span>Do I need machine-learning expertise to use Kiln?</span><span class="sign">+</span></span></button><div class="a"><div><p>No. You need to understand your <em>own task</em> well enough to supply good examples and to judge whether an answer is right or wrong. That is the expertise that matters here. We handle the specialisation; you stay the subject-matter expert. If you can describe what a correct output looks like and hand us a stack of real examples, you have everything you need.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">02</span><span class="qt"><span>How much data do I need?</span><span class="sign">+</span></span></button><div class="a"><div><p>Fewer examples than most people expect, and quality beats volume. A few hundred clean, representative examples of your task is often a workable starting point; a few thousand is comfortable. What matters more than the count is that they <em>look like the real work</em> &mdash; the same phrasing, edge cases, and formats you actually see. If you are unsure whether what you have is enough, send us a sample and we will tell you honestly before you commit to anything.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">03</span><span class="qt"><span>How long does it take?</span><span class="sign">+</span></span></button><div class="a"><div><p>During pre-beta, plan on <em>weeks to a couple of months</em> from first conversation to a model you are happy with. Assembling and cleaning examples is usually the slow part and depends mostly on you. Building the model itself is faster, and a follow-up round to refine it is faster still. We would rather set an honest expectation than promise a turnaround we cannot yet guarantee.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">04</span><span class="qt"><span>What does it cost?</span><span class="sign">+</span></span></button><div class="a"><div><p>There is <em>nothing to pay to start the conversation</em>. Once we have seen your task and your examples, we give you an estimate up front and then a firm quote before any real work begins. You will never be surprised by a bill. Pricing scales with the size and difficulty of the job, not with how much value the model creates for you afterwards &mdash; once it is yours, it is yours.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">05</span><span class="qt"><span>Can it really run fully offline, with no internet?</span><span class="sign">+</span></span></button><div class="a"><div><p>Yes. The model we deliver is a self-contained file that runs entirely on your own hardware. Once it is on the machine, it needs <em>no internet connection, no account, and no call home</em> &mdash; nothing to us or anyone else. You can run it on an air-gapped box behind a firewall and it will behave exactly the same. That is the whole point: the model, and the data you feed it at run time, stay with you.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">06</span><span class="qt"><span>What happens to my data?</span><span class="sign">+</span></span></button><div class="a"><div><p>Your examples are used for one thing: <em>building your model</em>. We do not train anyone else's model on them, we do not share or resell them, and they never become part of a shared pool. When the work is done and you have accepted the model, we <em>delete your data</em> on an agreed schedule. Retention, handling, and deletion are written into the agreement before you send us anything.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">07</span><span class="qt"><span>What if the model isn't good enough?</span><span class="sign">+</span></span></button><div class="a"><div><p>You find out <em>before you commit</em>, not after. We hold back a portion of your examples the model never sees during building and measure it against them, so you get real numbers on how it performs on your definition of correct &mdash; not a vague assurance. If those numbers fall short, we discuss a follow-up round to close the gap. You are not locked into accepting a model that does not clear the bar you set.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">08</span><span class="qt"><span>Can I retrain or update it later?</span><span class="sign">+</span></span></button><div class="a"><div><p>Yes. Your task will drift &mdash; new formats, new edge cases, new examples you have collected since. When that happens we run a <em>fresh round</em> on your updated set and hand you a new model. Your existing model keeps working in the meantime; there is no forced upgrade and no subscription keeping it alive. You come back when it makes sense for you.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">09</span><span class="qt"><span>What hardware do I need to run it?</span><span class="sign">+</span></span></button><div class="a"><div><p>We size the model to <em>where you intend to run it</em>, not the other way round. Many specialist models run comfortably on a modern laptop; a desktop with a decent GPU gives you more headroom and speed. Tell us your target machine early and we build to fit it. If you need the same model to run on both a workstation and a lighter laptop, we can deliver it at more than one size.</p></div></div></div>
+    <div class="item"><button class="q"><span class="fn">10</span><span class="qt"><span>Is the model really mine?</span><span class="sign">+</span></span></button><div class="a"><div><p>Yes, completely. You <em>own the weights</em> &mdash; the actual file &mdash; and you run it forever with no licence check, no seat count, and no dependence on us. If Kiln disappeared tomorrow, your model would keep working. There is <em>no lock-in</em>: no cloud you have to stay subscribed to, no service that can be switched off. We build it, we hand it over, and it is yours to keep, copy, and deploy on your own terms.</p></div></div></div>
+  </div>
+</section>
+
+<section id="s12">
+  <div class="clause"><span class="no">§12</span><h2>Glossary</h2><span class="dots"></span><span class="pg">p.13</span></div>
+  <div class="prose" style="margin-bottom:20px"><p>Plain-language definitions for the terms used throughout this datasheet. No jargon assumed.</p></div>
+  <dl class="defs">
+    <div class="d"><dt>Fine-tuning</dt><dd>Taking a model that already understands language in general and specialising it on examples of one specific task, so it does that task well. This is the core of what Kiln does with your examples.</dd></div>
+    <div class="d"><dt>Base model</dt><dd>The open, general-purpose model we start from before specialising it. It knows a lot about language broadly but nothing about your particular task yet.</dd></div>
+    <div class="d"><dt>Specialist vs. general model</dt><dd>A general model tries to do everything passably; a specialist model does one job reliably. Kiln delivers a specialist &mdash; smaller and sharper on your task than a general model many times its size.</dd></div>
+    <div class="d"><dt>Weights</dt><dd>The numbers inside a model that hold everything it has learned. Running the model means doing arithmetic with these numbers; owning the weights means owning the model itself.</dd></div>
+    <div class="d"><dt>Open weights</dt><dd>Weights you receive as a file and are free to keep, copy, and run yourself, with no licence server and no dependence on the maker. Your delivered model is open weights &mdash; yours outright.</dd></div>
+    <div class="d"><dt>GGUF</dt><dd>The standard single-file format we deliver the model in. It packs the whole model into one portable file that common local tools such as Ollama or llama.cpp can run directly.</dd></div>
+    <div class="d"><dt>Quantization</dt><dd>Storing the model's numbers at lower precision to shrink the file and speed it up, at a small cost to quality. Levels like Q4_K_M through Q8_0 let you trade size against fidelity for the machine you run on.</dd></div>
+    <div class="d"><dt>Context length</dt><dd>How much text the model can consider at once &mdash; your input plus its output. A longer context lets it handle bigger documents in one pass but uses more memory.</dd></div>
+    <div class="d"><dt>Local / offline inference</dt><dd>Running the model on your own hardware with no internet connection. Your inputs never leave the machine, and the model answers without contacting any outside service.</dd></div>
+    <div class="d"><dt>Held-out test set</dt><dd>A portion of your examples deliberately kept aside so the model never sees them while it is built. Measuring against them shows how it performs on work it has genuinely not encountered.</dd></div>
+    <div class="d"><dt>Ownership</dt><dd>You hold the weights and run them on your own terms, indefinitely, with no seat limits, no subscription, and no way for us to switch them off. The model is yours to keep.</dd></div>
+  </dl>
+</section>
+
+<section id="s13" class="register">
+        <div class="clause"><span class="no">§13</span><h2>Register interest</h2><span class="dots"></span><span class="pg">p.14</span></div>
         <div class="reg-grid">
           <div>
             <h3>The first cohort is forming. <em>Ask to be in it.</em></h3>
@@ -517,7 +612,6 @@
           </div>
         </div>
       </section>
-
     </main>
   </div>
 </div>
@@ -532,7 +626,7 @@
   (function(){
     var el = document.getElementById("typeline");
     if(!el) return;
-    var full = "kiln run ./intake-classifier.gguf --local --offline";
+    var full = "ollama run your-specialist";
     var reduce = window.matchMedia && window.matchMedia("(prefers-reduced-motion:reduce)").matches;
     if(reduce){ el.textContent = full; return; }
     var i = 0;
